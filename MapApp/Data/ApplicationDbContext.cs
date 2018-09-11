@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MapApp.Models;
+using MapApp.Models.LocationModels;
 
 namespace MapApp.Data
 {
@@ -22,5 +23,7 @@ namespace MapApp.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<MapApp.Models.LocationModels.Location> Location { get; set; }
     }
 }
