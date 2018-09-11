@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MapApp.Models;
 using MapApp.Models.LocationModels;
 using MapApp.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MapApp.Controllers
 {
@@ -20,14 +21,22 @@ namespace MapApp.Controllers
             _context = context;    
         }
 
-        // GET: Locations
-        public async Task<IActionResult> Index()
-        {
+		// GET: Locations
+		public async Task<IActionResult> Index()
+        {			
             return View(await _context.Location.ToListAsync());
         }
 
-        // GET: Locations/Details/5
-        public async Task<IActionResult> Details(int? id)
+		[Authorize]
+		// GET: MyLocationsIndex
+		public async Task<IActionResult> MyLocationsIndex()
+		{
+			return View((await _context.Location.ToListAsync()).Where(s => s.User == User.Identity.Name));
+		}
+
+		[Authorize]
+		// GET: Locations/Details/5
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -44,30 +53,34 @@ namespace MapApp.Controllers
             return View(location);
         }
 
-        // GET: Locations/Create
-        public IActionResult Create()
+		[Authorize]
+		// GET: Locations/Create
+		public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Locations/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+		[Authorize]
+		// POST: Locations/Create
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Name,Description,Type,Latitude,Longitude,District,Seasons,OpenTime,CloseTime,LastVisit,Duration")] Location location)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(location);
+				location.User = User.Identity.Name;
+				_context.Add(location);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(location);
         }
 
-        // GET: Locations/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+		[Authorize]
+		// GET: Locations/Edit/5
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -82,10 +95,11 @@ namespace MapApp.Controllers
             return View(location);
         }
 
-        // POST: Locations/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+		[Authorize]
+		// POST: Locations/Edit/5
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,Type,Latitude,Longitude,District,Seasons,OpenTime,CloseTime,LastVisit,Duration")] Location location)
         {
@@ -117,8 +131,9 @@ namespace MapApp.Controllers
             return View(location);
         }
 
-        // GET: Locations/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+		[Authorize]
+		// GET: Locations/Delete/5
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -135,8 +150,9 @@ namespace MapApp.Controllers
             return View(location);
         }
 
-        // POST: Locations/Delete/5
-        [HttpPost, ActionName("Delete")]
+		[Authorize]
+		// POST: Locations/Delete/5
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
