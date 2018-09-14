@@ -27,7 +27,13 @@ namespace MapApp.Controllers
             return View(await _context.Location.ToListAsync());
         }
 
-		[Authorize]
+        // GET: Locations
+        public async Task<IActionResult> Data()
+        {
+            return Json(await _context.Location.ToListAsync());
+        }
+
+        [Authorize]
 		// GET: MyLocationsIndex
 		public async Task<IActionResult> MyLocationsIndex()
 		{
