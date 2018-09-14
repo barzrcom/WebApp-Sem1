@@ -19,25 +19,10 @@
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Type)
+                    @Html.DisplayNameFor(model => model.Category)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.District)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Seasons)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.OpenTime)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CloseTime)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastVisit)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Duration)
+                    @Html.DisplayNameFor(model => model.Image)
                 </th>
             <th></th>
         </tr>
@@ -52,25 +37,10 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Type)
+                @Html.DisplayFor(modelItem => item.Category)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.District)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Seasons)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OpenTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CloseTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastVisit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
+                @Html.DisplayFor(modelItem => item.Image)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

@@ -28,9 +28,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label asp-for="Type" class="col-md-2 control-label"></label>
+					<label asp-for="Category" class="col-md-2 control-label"></label>
 					<div class="col-md-10">
-						<select asp-for="Type" asp-items="Html.GetEnumSelectList<LocationType>()" class="form-control"></select>
+						<select asp-for="Category" asp-items="Html.GetEnumSelectList<LocationCategory>()" class="form-control"></select>
 					</div>
 				</div>
 				<div class="form-group">
@@ -48,44 +48,10 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label asp-for="District" class="col-md-2 control-label"></label>
+					<label asp-for="Image" class="col-md-2 control-label"></label>
 					<div class="col-md-10">
-						<input asp-for="District" class="form-control" />
-						<span asp-validation-for="District" class="text-danger"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label asp-for="Seasons" class="col-md-2 control-label"></label>
-					<div class="col-md-10">
-						<select asp-for="Seasons" asp-items="Html.GetEnumSelectList<Seasons>()" class="form-control"></select>
-					</div>
-				</div>
-				<div class="form-group">
-					<label asp-for="OpenTime" class="col-md-2 control-label"></label>
-					<div class="col-md-10">
-						<input asp-for="OpenTime" class="form-control" />
-						<span asp-validation-for="OpenTime" class="text-danger"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label asp-for="CloseTime" class="col-md-2 control-label"></label>
-					<div class="col-md-10">
-						<input asp-for="CloseTime" class="form-control" />
-						<span asp-validation-for="CloseTime" class="text-danger"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label asp-for="LastVisit" class="col-md-2 control-label"></label>
-					<div class="col-md-10">
-						<input asp-for="LastVisit" class="form-control" />
-						<span asp-validation-for="LastVisit" class="text-danger"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label asp-for="Duration" class="col-md-2 control-label"></label>
-					<div class="col-md-10">
-						<input asp-for="Duration" class="form-control" />
-						<span asp-validation-for="Duration" class="text-danger"></span>
+						<input asp-for="Image" class="form-control" />
+						<span asp-validation-for="Image" class="text-danger"></span>
 					</div>
 				</div>
 				<div class="form-group">
