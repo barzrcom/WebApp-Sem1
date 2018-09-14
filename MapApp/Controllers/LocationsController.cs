@@ -10,6 +10,7 @@ using MapApp.Models.LocationModels;
 using MapApp.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace MapApp.Controllers
 {
