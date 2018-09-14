@@ -26,9 +26,9 @@ namespace MapApp.Models.LocationModels
 
 		public LocationType Type { get; set; }
 
-		public long Latitude { get; set; }
+		public float Latitude { get; set; }
 
-		public long Longitude { get; set; }
+		public float Longitude { get; set; }
 
 		public string District { get; set; }
 
