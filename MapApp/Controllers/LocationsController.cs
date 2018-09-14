@@ -72,7 +72,7 @@ namespace MapApp.Controllers
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Description,Type,Latitude,Longitude,District,Seasons,OpenTime,CloseTime,LastVisit,Duration")] Location location)
+        public async Task<IActionResult> Create([Bind("ID,Name,Description,Category,Latitude,Longitude,Image")] Location location)
         {
             if (ModelState.IsValid)
             {
@@ -107,7 +107,7 @@ namespace MapApp.Controllers
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,Type,Latitude,Longitude,District,Seasons,OpenTime,CloseTime,LastVisit,Duration")] Location location)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,Category,Latitude,Longitude,Image")] Location location)
         {
             if (id != location.ID)
             {
