@@ -118,7 +118,8 @@ namespace MapApp.Controllers
             {
                 try
                 {
-                    _context.Update(location);
+					location.User = User.Identity.Name;
+					_context.Update(location);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
