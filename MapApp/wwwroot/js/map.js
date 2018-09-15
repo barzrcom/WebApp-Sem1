@@ -6,8 +6,10 @@ function initMap() {
     // The location of Colman
     var colman = { lat: 31.968987, lng: 34.770724 };
     // The map, centered at Colman
-    map = new google.maps.Map(document.getElementById('map'), { zoom: 6, center: colman });
-    // The marker, positioned at Colman
+	if (map == null) {
+		map = new google.maps.Map(document.getElementById('map'), { zoom: 6, center: colman });
+	}
+		// The marker, positioned at Colman
     //var marker = new google.maps.Marker({ position: colman, map: map });
 }
 

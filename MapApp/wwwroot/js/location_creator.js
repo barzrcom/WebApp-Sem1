@@ -8,13 +8,18 @@
 		'width': '50%' /* The width is the width of the web page */
 	});
 
-
 	var markers = [];
 
-
+	if ($('#Latitude').val() != 0) {
+		// "Edit" page already have location because is already set on the Creation
+		var pos = {
+			lat: parseFloat($('#Latitude').val()),
+			lng: parseFloat($('#Longitude').val())
+		};
+		addMarker(pos);
 
 	// Try HTML5 geolocation.
-	if (navigator.geolocation) {
+    } else if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function (position) {
 			var pos = {
 				lat: position.coords.latitude,
@@ -34,16 +39,6 @@
 	map.addListener('click', function (event) {
 		addMarker(event.latLng);
 	});
-
-	// Adds a marker to the map and push to the array.
-	function addMarker(location) {
-		console.log('You clicked on: ' + event.latLng);
-		var marker = new google.maps.Marker({
-			position: location,
-			map: map
-		});
-		markers.push(marker);
-	}
 
 	// Adds a marker to the map and push to the array.
 	function addMarker(location) {
