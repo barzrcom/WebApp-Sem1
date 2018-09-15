@@ -25,10 +25,42 @@ function refreshLocations() {
     $.get("/Locations/Data", function (data) {
         console.log(data);
         clearLocations();
-        $.each(data, function (index, data) {
-            var pos = { lat: data.latitude, lng: data.longitude };
-            markerList.push(new google.maps.Marker({ position: pos, map: map }));
+		$.each(data, function (index, data) {
+			// Extract Geo Position from data
+			var pos = { lat: data.latitude, lng: data.longitude };
+			// Add info Window Object based on the specific data
+			var infowindow = new google.maps.InfoWindow({ content: FormatInfoWindowContent(data) });
+			// Create a Google map marker and add it to the list
+			var marker = new google.maps.Marker({ position: pos, map: map, title: data.name })
+			markerList.push(marker);
+			// Add click function to Marker
+			marker.addListener('click', function () { infowindow.open(map, marker); });
         });
 
     });
 };
+
+
+function FormatInfoWindowContent(data) {
+	/*
+	 * Function handle how the Info Windows content will look like
+	 */
+	var description = data.description;
+	if (description == null) {
+		description = 'Empty Description.';
+	}
+	if (data.image != null) {
+		var image = '<img id="preview_image" src="data:image;base64,' +
+			data.image + '" width="90px" height="90px" />';
+	} else { var image = "";}
+	var contentString = '<div id="content">' +
+		'<div id="siteNotice">' +
+		'</div>' +
+		'<h1 id="firstHeading" class="firstHeading">' + data.name +
+		'</h1><div id="bodyContent">' +
+		'<p>' + description + '</p>' +
+		'<p>' + image + '</p>' +
+		'</div>' +
+		'</div>';
+	return contentString;
+}
