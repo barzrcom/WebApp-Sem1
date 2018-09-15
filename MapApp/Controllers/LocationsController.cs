@@ -179,7 +179,7 @@ namespace MapApp.Controllers
 		private async void UpdateCustomFields(Location location, IFormFile Image)
 		{
 			// TODO: Convert Image file to byte here.
-			if (Image == null || Image.Length > 0)
+			if (Image != null && Image.Length > 0)
 			{
 				using (var stream = new MemoryStream())
 				{
