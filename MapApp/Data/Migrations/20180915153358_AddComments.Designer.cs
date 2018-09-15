@@ -8,9 +8,10 @@ using MapApp.Data;
 namespace MapApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180915153358_AddComments")]
+    partial class AddComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -78,10 +79,6 @@ namespace MapApp.Data.Migrations
                     b.Property<DateTime>("EditTime");
 
                     b.Property<string>("Header");
-
-                    b.Property<int>("Location");
-
-                    b.Property<string>("User");
 
                     b.HasKey("ID");
 

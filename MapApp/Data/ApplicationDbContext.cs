@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MapApp.Models;
 using MapApp.Models.LocationModels;
+using MapApp.Models.CommentsModels;
 
 namespace MapApp.Data
 {
@@ -25,5 +26,7 @@ namespace MapApp.Data
         }
 
         public DbSet<MapApp.Models.LocationModels.Location> Location { get; set; }
+
+        public DbSet<MapApp.Models.CommentsModels.Comment> Comment { get; set; }
     }
 }
