@@ -23,12 +23,6 @@ namespace MapApp.Controllers
         {
             _context = context;
         }
-        
-        // GET: Locations
-        public async Task<IActionResult> Index()
-        {
-            return View();
-        }
 
         // GET: Admin/Users
         public async Task<IActionResult> Users()
