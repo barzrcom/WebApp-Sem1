@@ -40,9 +40,6 @@
     <Content Update="Views\Admin\EditLocation.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Admin\Index.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
     <Content Update="Views\Admin\DeleteUser.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
