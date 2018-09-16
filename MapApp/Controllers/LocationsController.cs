@@ -46,6 +46,7 @@ namespace MapApp.Controllers
 		// GET: Locations/Details/5
 		public async Task<IActionResult> Details(int? id)
 		{
+
 			if (id == null)
 			{
 				return NotFound();
@@ -57,8 +58,18 @@ namespace MapApp.Controllers
 			{
 				return NotFound();
 			}
+            try
+            {
+                location.Views++;
+                _context.Update(location);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
 
-			return View(location);
+            }
+            return View(location);
+            
 		}
 
 		[Authorize]
