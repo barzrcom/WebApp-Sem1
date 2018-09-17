@@ -54,16 +54,6 @@ namespace MapApp.Controllers
 			{
 				return NotFound();
 			}
-            try
-            {
-                location.Views++;
-                _context.Update(location);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-
-            }
             return View(location);
             
 		}
