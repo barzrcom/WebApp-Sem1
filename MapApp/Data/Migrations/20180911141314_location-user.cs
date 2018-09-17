@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MapApp.Data.Migrations
 {
-    public partial class locationuser : Migration
+	public partial class locationuser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
