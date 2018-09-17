@@ -22,7 +22,5 @@ namespace MapApp.Models.LocationModels
 		public float Longitude { get; set; }
 
 		public byte[] Image { get; set; }
-
-        public int Views { get; set; }
     }
 }
