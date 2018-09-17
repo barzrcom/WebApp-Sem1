@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MapApp.Data.Migrations
 {
-    public partial class addedviews : Migration
+	public partial class addedviews : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

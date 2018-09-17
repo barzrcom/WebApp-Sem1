@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MapApp.Models;
 using MapApp.Models.LocationModels;
 using MapApp.Data;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +10,7 @@ using System.IO;
 
 namespace MapApp.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+	[Authorize(Roles = "Administrator")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
