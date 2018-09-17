@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MapApp.Models;
 using MapApp.Models.LocationModels;
 using MapApp.Data;
 using Microsoft.AspNetCore.Authorization;
@@ -111,6 +107,13 @@ namespace MapApp.Controllers
 			{
 				return NotFound();
 			}
+
+			bool isAdmin = User.IsInRole("Administrator");
+			if (location.User != User.Identity.Name && !(isAdmin))
+			{
+				return RedirectToAction("AccessDenied", "Account");
+			}
+
 			return View(location);
 		}
 
@@ -165,6 +168,12 @@ namespace MapApp.Controllers
 			if (location == null)
 			{
 				return NotFound();
+			}
+
+			bool isAdmin = User.IsInRole("Administrator");
+			if (location.User != User.Identity.Name && !(isAdmin))
+			{
+				return RedirectToAction("AccessDenied", "Account");
 			}
 
 			return View(location);
