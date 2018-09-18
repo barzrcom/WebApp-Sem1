@@ -46,6 +46,8 @@ namespace MapApp
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddSingleton<IConfiguration>(Configuration);
+
             services.AddMvc();
 
             // Add application services.

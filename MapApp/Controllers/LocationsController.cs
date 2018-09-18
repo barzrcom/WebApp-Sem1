@@ -10,17 +10,20 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Net.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace MapApp.Controllers
 {
 	public class LocationsController : Controller
 	{
 		private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
 
-		public LocationsController(ApplicationDbContext context)
+        public LocationsController(ApplicationDbContext context, IConfiguration configuration)
 		{
 			_context = context;
-		}
+            _configuration = configuration;
+        }
 
 		// GET: Locations
 		public async Task<IActionResult> Index()
@@ -71,11 +74,11 @@ namespace MapApp.Controllers
         // Posting Content to Page on Facebook
         private async Task<string> FacebookPublish(Location location)
         {
-            string uri = "https://graph.facebook.com";
-            string page = "/264600174386513/feed";
+            string uri = _configuration.GetValue<string>("Facebook:uri");
+            string page = _configuration.GetValue<string>("Facebook:page");
+            string accessToken = _configuration.GetValue<string>("Facebook:accessToken");
             string message = location.Name + " " + location.Description;
-            string accessToken = "EAADz7RiCz5kBAMv0966BKS7AXtWdMwqEztUjZAWQjwBSDm98p2JCPx9J3Vh8Y5wEUIVySxIevZAJOk39VxqYgVKkWYrQIxjI8uVE9r0WZCfNj5eRzKJD0i8mB44WMBZAJ5nnGMsOz1sHE6htlkutAiT5pKBggZAz9BaTxooeCmQZDZD";
-            
+
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(uri);
