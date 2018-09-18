@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MapApp.Data.Migrations
 {
-    public partial class location : Migration
+	public partial class location : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
