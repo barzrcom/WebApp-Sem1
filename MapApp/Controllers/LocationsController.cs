@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,8 @@ using MapApp.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.Net.Http;
 
 namespace MapApp.Controllers
 {
@@ -65,6 +68,28 @@ namespace MapApp.Controllers
 			return View();
 		}
 
+        // Posting Content to Page on Facebook
+        private async Task<string> FacebookPublish(Location location)
+        {
+            string uri = "https://graph.facebook.com";
+            string page = "/264600174386513/feed";
+            string message = location.Name + " " + location.Description;
+            string accessToken = "EAADz7RiCz5kBAMv0966BKS7AXtWdMwqEztUjZAWQjwBSDm98p2JCPx9J3Vh8Y5wEUIVySxIevZAJOk39VxqYgVKkWYrQIxjI8uVE9r0WZCfNj5eRzKJD0i8mB44WMBZAJ5nnGMsOz1sHE6htlkutAiT5pKBggZAz9BaTxooeCmQZDZD";
+            
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(uri);
+                var content = new FormUrlEncodedContent(new[]
+                {
+                        new KeyValuePair<string, string>("message", message),
+                        new KeyValuePair<string, string>("access_token", accessToken)
+                });
+                var result = await client.PostAsync(page, content);
+                return await result.Content.ReadAsStringAsync();
+
+            }
+        }
+
 		[Authorize]
 		// POST: Locations/Create
 		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -78,9 +103,13 @@ namespace MapApp.Controllers
 				this.UpdateCustomFields(location, Image);
 				_context.Add(location);
 				await _context.SaveChangesAsync();
-				return RedirectToAction("Index");
+                if (Image != null && Image.Length > 0)
+                {
+                    await Task.Run(() => FacebookPublish(location));
+                }
+                return RedirectToAction("Index");
 			}
-			return View(location);
+            return View(location);
 		}
 
 		[Authorize]
