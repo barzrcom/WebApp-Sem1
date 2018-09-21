@@ -58,7 +58,15 @@ namespace MapApp.Controllers
 				return NotFound();
 			}
 
-			return View(location);
+            var comment = await _context.Comment.ToListAsync();
+            var result =
+                from com in comment
+                where com.Location.Equals(id)
+                select com;
+            ViewBag.Comments = result;
+            ViewBag.User = User.Identity.Name;
+
+            return View(location);
 		}
 
 		[Authorize]

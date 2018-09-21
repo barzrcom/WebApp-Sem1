@@ -39,13 +39,26 @@ namespace MapApp.Controllers
             {
                 return NotFound();
             }
-
             return View(comment);
         }
 
-        // GET: Comments/Create
-        public IActionResult Create()
+        // GET: Comments/Create/2
+        public async Task<IActionResult> Create(int? loc_id)
         {
+            if (loc_id == null)
+            {
+                return NotFound();
+            }
+
+            var comment = await _context.Location
+                .SingleOrDefaultAsync(m => m.ID == loc_id);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.loc_id = loc_id;
+            ViewBag.User = User.Identity.Name;
             return View();
         }
 
@@ -60,7 +73,7 @@ namespace MapApp.Controllers
             {
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("../Locations/Details/"+comment.Location);
             }
             return View(comment);
         }
@@ -111,7 +124,7 @@ namespace MapApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("../Locations/Details/" + comment.Location);
             }
             return View(comment);
         }
@@ -142,7 +155,7 @@ namespace MapApp.Controllers
             var comment = await _context.Comment.SingleOrDefaultAsync(m => m.ID == id);
             _context.Comment.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("../Locations/Details/" + comment.Location);
         }
 
         private bool CommentExists(int id)

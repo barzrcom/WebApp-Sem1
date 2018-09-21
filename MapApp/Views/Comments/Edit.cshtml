@@ -41,21 +41,9 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="User" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="User" class="form-control" />
-                <span asp-validation-for="User" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Location" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
+                <input asp-for="User" value="@Model.User" type="hidden" />
+                <input asp-for="Location" value="@Model.Location" type="hidden" />
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
@@ -63,7 +51,7 @@
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="../Locations/Details/@Model.Location">Back to List</a>
 </div>
 
 @section Scripts {

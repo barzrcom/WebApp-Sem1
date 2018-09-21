@@ -58,4 +58,65 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<p>
+    <a asp-action="../Comments/Create" asp-route-loc_id="@Model.ID">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Header
+            </th>
+            <th>
+                Content
+            </th>
+            <th>
+                Create Time
+            </th>
+            <th>
+                Edit Time
+            </th>
+            <th>
+                User
+            </th>
+            <th>
+                Location
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.Comments)
+        {
+            <tr>
+                <td>
+                    @item.Header
+                </td>
+                <td>
+                    @item.Content
+                </td>
+                <td>
+                    @item.CreateTime
+                </td>
+                <td>
+                    @item.EditTime
+                </td>
+                <td>
+                    @item.User
+                </td>
+                <td>
+                    @item.Location
+                </td>
+                <td>
+                    @if(item.User == ViewBag.User){<a asp-action="../Comments/Edit" asp-route-id="@item.ID">Edit</a> @Html.Raw(" | ")  }
+                    <a asp-action="../Comments/Details" asp-route-id="@item.ID">Details</a>
+                    @if (item.User == ViewBag.User){@Html.Raw(" | ")<a asp-action="../Comments/Delete" asp-route-id="@item.ID">Delete</a>  }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
 
