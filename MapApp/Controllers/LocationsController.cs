@@ -174,8 +174,18 @@ namespace MapApp.Controllers
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
 			var location = await _context.Location.SingleOrDefaultAsync(m => m.ID == id);
-			_context.Location.Remove(location);
-			await _context.SaveChangesAsync();
+            _context.Location.Remove(location);
+
+            // Delete all the comments along the Location
+            var comments = from com in _context.Comment
+                          where com.Location.Equals(id)
+                          select com;
+            foreach(var c in comments)
+            {
+                _context.Comment.Remove(c);
+            }
+
+            await _context.SaveChangesAsync();
 			return RedirectToAction("Index");
 		}
 
