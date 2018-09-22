@@ -67,10 +67,12 @@ namespace MapApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Header,Content,CreateTime,EditTime,User,Location")] Comment comment)
+        public async Task<IActionResult> Create([Bind("ID,Header,Content,User,Location")] Comment comment)
         {
             if (ModelState.IsValid)
             {
+                comment.CreateTime = DateTime.Now;
+                comment.EditTime = DateTime.Now;
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("../Locations/Details/"+comment.Location);
@@ -99,7 +101,7 @@ namespace MapApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Header,Content,CreateTime,EditTime,User,Location")] Comment comment)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Header,Content,Location")] Comment comment)
         {
             if (id != comment.ID)
             {
@@ -110,7 +112,10 @@ namespace MapApp.Controllers
             {
                 try
                 {
-                    _context.Update(comment);
+                    comment.EditTime = DateTime.Now;
+                    _context.Entry(comment).Property(c => c.Header).IsModified = true;
+                    _context.Entry(comment).Property(c => c.EditTime).IsModified = true;
+                    _context.Entry(comment).Property(c => c.Content).IsModified = true;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
