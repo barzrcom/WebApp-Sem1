@@ -109,9 +109,9 @@
                     @item.Location
                 </td>
                 <td>
-                    @if(item.User == ViewBag.User){<a asp-action="../Comments/Edit" asp-route-id="@item.ID">Edit</a> @Html.Raw(" | ")  }
+                    @if(item.User == ViewBag.User || ViewBag.Admin){<a asp-action="../Comments/Edit" asp-route-id="@item.ID">Edit</a> @Html.Raw(" | ")  }
                     <a asp-action="../Comments/Details" asp-route-id="@item.ID">Details</a>
-                    @if (item.User == ViewBag.User){@Html.Raw(" | ")<a asp-action="../Comments/Delete" asp-route-id="@item.ID">Delete</a>  }
+                    @if (item.User == ViewBag.User || ViewBag.Admin){@Html.Raw(" | ")<a asp-action="../Comments/Delete" asp-route-id="@item.ID">Delete</a>  }
                 </td>
             </tr>
         }

@@ -65,6 +65,7 @@ namespace MapApp.Controllers
                 select com;
             ViewBag.Comments = result;
             ViewBag.User = User.Identity.Name;
+            ViewBag.Admin = User.IsInRole("Administrator");
 
             return View(location);
 		}

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MapApp.Data;
 using MapApp.Models.CommentsModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MapApp.Controllers
 {
+    [Authorize]
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,7 +20,8 @@ namespace MapApp.Controllers
         {
             _context = context;    
         }
-        
+
+        [Authorize(Roles = "Administrator")]
         // GET: Comments
         public async Task<IActionResult> Index()
         {
@@ -89,7 +92,8 @@ namespace MapApp.Controllers
             }
 
             var comment = await _context.Comment.SingleOrDefaultAsync(m => m.ID == id);
-            if (comment == null)
+            // Nor found if comment null or user is not owned the comment and not an admin
+            if (comment == null || (comment.User != User.Identity.Name && !User.IsInRole("Administrator")))
             {
                 return NotFound();
             }
@@ -144,7 +148,8 @@ namespace MapApp.Controllers
 
             var comment = await _context.Comment
                 .SingleOrDefaultAsync(m => m.ID == id);
-            if (comment == null)
+            // Nor found if comment null or user is not owned the comment and not an admin
+            if (comment == null || (comment.User != User.Identity.Name && !User.IsInRole("Administrator")))
             {
                 return NotFound();
             }
