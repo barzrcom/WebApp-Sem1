@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,8 +10,11 @@ namespace MapApp.Models.CommentsModels
     {
         public int ID { get; set; }
 
+        [StringLength(60, MinimumLength = 3)]
+        [Required]
         public string Header { get; set; }
 
+        [StringLength(500)]
         public string Content { get; set; }
 
         public DateTime CreateTime { get; set; }
