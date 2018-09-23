@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
+using MapApp.Models.CommentsModels;
 
 namespace MapApp.Controllers
 {
@@ -61,9 +62,9 @@ namespace MapApp.Controllers
 				return NotFound();
 			}
 
-            var comment = await _context.Comment.ToListAsync();
+            var comments = await _context.Comment.ToListAsync();
             var result =
-                from com in comment
+                from com in comments
                 where com.Location.Equals(id)
                 select com;
             ViewBag.Comments = result;
@@ -73,6 +74,7 @@ namespace MapApp.Controllers
             return View(location);
 
 		}
+
 
 		[Authorize]
 		// GET: Locations/Create
