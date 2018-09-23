@@ -35,10 +35,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Views\Admin\Index.cshtml">
+    <Content Update="Views\Admin\DeleteLocation.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Admin\EditLocation.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Admin\DeleteUser.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Admin\Locations.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Admin\Users.cshtml">

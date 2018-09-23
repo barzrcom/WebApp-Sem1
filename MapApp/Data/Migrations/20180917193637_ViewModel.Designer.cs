@@ -2,13 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MapApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180917193637_ViewModel")]
+    partial class ViewModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -64,28 +66,6 @@ namespace MapApp.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("MapApp.Models.CommentsModels.Comment", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Content");
-
-                    b.Property<DateTime>("CreateTime");
-
-                    b.Property<DateTime>("EditTime");
-
-                    b.Property<string>("Header");
-
-                    b.Property<int>("Location");
-
-                    b.Property<string>("User");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Comment");
-                });
-
             modelBuilder.Entity("MapApp.Models.LocationModels.Location", b =>
                 {
                     b.Property<int>("ID")
@@ -104,6 +84,8 @@ namespace MapApp.Data.Migrations
                     b.Property<string>("Name");
 
                     b.Property<string>("User");
+
+                    b.Property<int>("Views");
 
                     b.HasKey("ID");
 

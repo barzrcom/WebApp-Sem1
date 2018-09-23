@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MapApp.Models.ManageViewModels
+﻿namespace MapApp.Models.ManageViewModels
 {
-    public class RemoveLoginViewModel
+	public class RemoveLoginViewModel
     {
         public string LoginProvider { get; set; }
         public string ProviderKey { get; set; }

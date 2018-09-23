@@ -31,14 +31,37 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">MapApp</a>
             </div>
             <div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-					<li><a asp-area="" asp-controller="Locations" asp-action="Index">Locations</a></li>
-					<li><a asp-area="" asp-controller="Locations" asp-action="MyLocationsIndex">My Locations</a></li>
-					<li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                <ul class="nav navbar-nav">
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Locations
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Locations" asp-action="Index">All</a></li>
+                            <li><a asp-area="" asp-controller="Locations" asp-action="MyLocationsIndex">My Locations</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-					<li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
-				</ul>
+                    @if (this.User.IsInRole("Administrator"))
+                    {
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                Admin
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a asp-area="" asp-controller="Admin" asp-action="Users">Users</a></li>
+                                <li><a asp-area="" asp-controller="Admin" asp-action="Locations">Locations</a></li>
+                                <li><a asp-area="" asp-controller="Admin" asp-action="Comments">Comments</a></li>
+                            </ul>
+                        </li>
+                    }
+
+                </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>

@@ -1,27 +1,29 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MapApp.Models;
 using MapApp.Models.LocationModels;
 using MapApp.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.Net.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace MapApp.Controllers
 {
 	public class LocationsController : Controller
 	{
 		private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
 
-		public LocationsController(ApplicationDbContext context)
+        public LocationsController(ApplicationDbContext context, IConfiguration configuration)
 		{
 			_context = context;
-		}
+            _configuration = configuration;
+        }
 
 		// GET: Locations
 		public async Task<IActionResult> Index()
@@ -46,6 +48,7 @@ namespace MapApp.Controllers
 		// GET: Locations/Details/5
 		public async Task<IActionResult> Details(int? id)
 		{
+
 			if (id == null)
 			{
 				return NotFound();
@@ -68,6 +71,7 @@ namespace MapApp.Controllers
             ViewBag.Admin = User.IsInRole("Administrator");
 
             return View(location);
+
 		}
 
 		[Authorize]
@@ -76,6 +80,28 @@ namespace MapApp.Controllers
 		{
 			return View();
 		}
+
+        // Posting Content to Page on Facebook
+        private async Task<string> FacebookPublish(Location location)
+        {
+            string uri = _configuration.GetValue<string>("Facebook:uri");
+            string page = _configuration.GetValue<string>("Facebook:page");
+            string accessToken = _configuration.GetValue<string>("Facebook:accessToken");
+            string message = location.Name + " " + location.Description;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(uri);
+                var content = new FormUrlEncodedContent(new[]
+                {
+                        new KeyValuePair<string, string>("message", message),
+                        new KeyValuePair<string, string>("access_token", accessToken)
+                });
+                var result = await client.PostAsync(page, content);
+                return await result.Content.ReadAsStringAsync();
+
+            }
+        }
 
 		[Authorize]
 		// POST: Locations/Create
@@ -90,9 +116,13 @@ namespace MapApp.Controllers
 				this.UpdateCustomFields(location, Image);
 				_context.Add(location);
 				await _context.SaveChangesAsync();
-				return RedirectToAction("Index");
+                if (Image != null && Image.Length > 0)
+                {
+                    await Task.Run(() => FacebookPublish(location));
+                }
+                return RedirectToAction("Index");
 			}
-			return View(location);
+            return View(location);
 		}
 
 		[Authorize]
@@ -109,6 +139,13 @@ namespace MapApp.Controllers
 			{
 				return NotFound();
 			}
+
+			bool isAdmin = User.IsInRole("Administrator");
+			if (location.User != User.Identity.Name && !(isAdmin))
+			{
+				return RedirectToAction("AccessDenied", "Account");
+			}
+
 			return View(location);
 		}
 
@@ -165,6 +202,12 @@ namespace MapApp.Controllers
 				return NotFound();
 			}
 
+			bool isAdmin = User.IsInRole("Administrator");
+			if (location.User != User.Identity.Name && !(isAdmin))
+			{
+				return RedirectToAction("AccessDenied", "Account");
+			}
+
 			return View(location);
 		}
 
@@ -198,7 +241,7 @@ namespace MapApp.Controllers
 		private async void UpdateCustomFields(Location location, IFormFile Image)
 		{
 			// TODO: Convert Image file to byte here.
-			if (Image == null || Image.Length > 0)
+			if (Image != null && Image.Length > 0)
 			{
 				using (var stream = new MemoryStream())
 				{
