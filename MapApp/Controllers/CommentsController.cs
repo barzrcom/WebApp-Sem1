@@ -74,8 +74,7 @@ namespace MapApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                comment.CreateTime = DateTime.Now;
-                comment.EditTime = DateTime.Now;
+                comment.EditTime = comment.CreateTime = DateTime.Now;
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("../Locations/Details/"+comment.Location);
