@@ -1,37 +1,27 @@
-﻿@{
+@{
     ViewData["Title"] = "Home Page";
 }
+<br/>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3>
+            <b>My Map</b>
+        </h3>
+    </div>
+    <div class="panel-body">
+        <div id="map"></div>
+    </div>
+    <br>
+    <button id="refresh_locations" class="btn btn-default">Refresh Locations</button>
+    <button id="clear_locations" class="btn btn-default">Clear Locations</button>
 
-<style>
-	/* Set the size of the div element that contains the map */
-	#map {
-		height: 400px; /* The height is 400 pixels */
-		width: 100%; /* The width is the width of the web page */
-	}
-</style>
-
-<div class="row">
-	<h3>My Map</h3>
-    <h4>Testing changes..</h4>
-	<!--The div element for the map -->
-	<div id="map"></div>
-	<script>
-// Initialize and add the map
-function initMap() {
-	  // The location of Colman
-	var colman = { lat: 31.968987, lng: 34.770724};
-	// The map, centered at Colman
-	var map = new google.maps.Map(document.getElementById('map'), { zoom: 18, center: colman});
-	// The marker, positioned at Colman
-	var marker = new google.maps.Marker({ position: colman, map: map});
-}
-	</script>
-	<!--Load the API from the specified URL
-	* The async attribute allows the browser to render the page while the API loads
-	* The key parameter will contain your own API key (which is not needed for this tutorial)
-	* The callback parameter executes the initMap() function
-	-->
-	<script async defer
-			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3iZKrhlbxVPKs2DgI4ADKcGKkEVXxtGw&callback=initMap">
-	</script>
 </div>
+@section Scripts {
+    <script src="~/js/map.js"></script>
+
+    <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3iZKrhlbxVPKs2DgI4ADKcGKkEVXxtGw&callback=initMap">
+    </script>
+    
+    <script src="~/js/index.js"></script>
+}

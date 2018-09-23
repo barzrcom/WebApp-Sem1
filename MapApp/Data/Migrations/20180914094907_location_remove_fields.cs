@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MapApp.Data.Migrations
 {
-    public partial class location_remove_fields : Migration
+	public partial class location_remove_fields : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

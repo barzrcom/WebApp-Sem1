@@ -2,20 +2,21 @@
 
 namespace MapApp.Data.Migrations
 {
-	public partial class locationuser : Migration
+	public partial class addedviews : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "User",
+            migrationBuilder.AddColumn<int>(
+                name: "Views",
                 table: "Location",
-                nullable: true);
+                nullable: false,
+                defaultValue: 0);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "User",
+                name: "Views",
                 table: "Location");
         }
     }
