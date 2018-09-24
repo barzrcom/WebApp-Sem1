@@ -65,6 +65,67 @@
 	<a asp-action="Index">Back to List</a>
 </div>
 
+<br />
+<h4>Comments</h4>
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Header
+            </th>
+            <th>
+                Content
+            </th>
+            <th>
+                Create Time
+            </th>
+            <th>
+                Edit Time
+            </th>
+            <th>
+                User
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.Comments)
+        {
+            <tr>
+                <td>
+                    @item.Header
+                </td>
+                <td>
+                    @item.Content
+                </td>
+                <td>
+                    @item.CreateTime
+                </td>
+                <td>
+                    @item.EditTime
+                </td>
+                <td>
+                    @item.User
+                </td>
+                <td>
+                    @if(item.User == ViewBag.User || ViewBag.Admin){<a asp-action="../Comments/Edit" asp-route-id="@item.ID">Edit</a> @Html.Raw(" | ")  }
+                    <a asp-action="../Comments/Details" asp-route-id="@item.ID">Details</a>
+                    @if (item.User == ViewBag.User || ViewBag.Admin){@Html.Raw(" | ")<a asp-action="../Comments/Delete" asp-route-id="@item.ID">Delete</a>  }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>
+    <a asp-action="../Comments/Create" asp-route-loc_id="@Model.ID">New comment</a>
+</p>
+
+
+
+
 @section Scripts {
 	<script src="~/js/map.js"></script>
 	<script src="~/js/weather.js"></script>
@@ -74,3 +135,4 @@
 
 	<script src="~/js/location_details.js"></script>
 }
+
