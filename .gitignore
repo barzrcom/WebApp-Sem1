@@ -39,3 +39,4 @@ Thumbs.db
 
 # dotCover
 *.dotCover
+/MapApp/Data/Migrations
