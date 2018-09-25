@@ -5,13 +5,11 @@
 }
 
 <h2>Details</h2>
-<style>
-    .dl-horizontal dt { text-align: left; }
-</style>
-<div class="row">
+
+<div>
     <h4>Location</h4>
     <hr />
-    <dl class="dl-horizontal col-lg-4 pull-left">
+    <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -60,9 +58,8 @@
             <img src="@totalMessage" width="100" height="100" />
         </dd>
     </dl>
-    <div class="col-lg-8 pull-right" id="map"></div>
 </div>
-
+<div id="map"></div>
 <div>
 	<a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
 	<a asp-action="Index">Back to List</a>
