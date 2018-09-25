@@ -62,17 +62,11 @@ namespace MapApp.Controllers
 				return NotFound();
 			}
 
-            // Gets the location's comments
             var comments = await _context.Comment.ToListAsync();
             var result =
                 from com in comments
                 where com.Location.Equals(id)
                 select com;
-
-            ViewBag.Doubled = false;
-            if (CommentsController.IsDoubled(comments, id, User.Identity.Name))
-                ViewBag.Doubled = true;
-
             ViewBag.Comments = result;
             ViewBag.User = User.Identity.Name;
             ViewBag.Admin = User.IsInRole("Administrator");
@@ -261,11 +255,5 @@ namespace MapApp.Controllers
 			//location.Image = Convert.ToBase64String(location.Image);
 			location.User = User.Identity.Name;
 		}
-
-        public IActionResult DoubleComment()
-        {
-            return View();
-        }
-
-    }
+	}
 }
