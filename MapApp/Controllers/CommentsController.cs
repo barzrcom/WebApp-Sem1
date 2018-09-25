@@ -53,16 +53,12 @@ namespace MapApp.Controllers
                 return NotFound();
             }
 
-            var isLocExist = await _context.Location
+            var comment = await _context.Location
                 .SingleOrDefaultAsync(m => m.ID == loc_id);
-            if (isLocExist == null)
+            if (comment == null)
             {
                 return NotFound();
             }
-
-            // Check if this user wrote more than one comment for this location
-            if (IsDoubled(await _context.Comment.ToListAsync(), loc_id, User.Identity.Name))
-                return RedirectToAction("DoubleComment");
 
             ViewBag.loc_id = loc_id;
             ViewBag.User = User.Identity.Name;
@@ -76,10 +72,6 @@ namespace MapApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Header,Content,User,Location")] Comment comment)
         {
-            if (IsDoubled(await _context.Comment.ToListAsync(), comment.Location, User.Identity.Name))
-                return RedirectToAction("DoubleComment");
-
-
             if (ModelState.IsValid)
             {
                 comment.EditTime = comment.CreateTime = DateTime.Now;
@@ -178,24 +170,6 @@ namespace MapApp.Controllers
         private bool CommentExists(int id)
         {
             return _context.Comment.Any(e => e.ID == id);
-        }
-
-        public IActionResult DoubleComment()
-        {
-            return View();
-        }
-
-        // Check if there's more than one comment for a location of the same user
-        public static bool IsDoubled(IEnumerable<Comment> comments, int? loc_id, string user)
-        {
-            var result =
-                from com in comments
-                where com.Location.Equals(loc_id) && com.User.Equals(user)
-                select com;
-            if (result.Any())
-                return true;
-            else
-                return false;
         }
     }
 }
