@@ -7,6 +7,8 @@ using MapApp.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using MapApp.Models.CommentsModels;
+using System;
 
 namespace MapApp.Controllers
 {
@@ -32,6 +34,12 @@ namespace MapApp.Controllers
         {
 
             return View(await _context.Location.ToListAsync());
+        }
+
+        // GET: Admin/Comments
+        public async Task<IActionResult> Comments()
+        {
+            return View(await _context.Comment.ToListAsync());
         }
 
         [Authorize]
@@ -170,5 +178,97 @@ namespace MapApp.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Locations");
         }
+
+        // GET: Comments/Edit/5
+        public async Task<IActionResult> EditComment(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var comment = await _context.Comment.SingleOrDefaultAsync(m => m.ID == id);
+            // Nor found if comment null or user is not owned the comment and not an admin
+            if (comment == null || (comment.User != User.Identity.Name && !User.IsInRole("Administrator")))
+            {
+                return NotFound();
+            }
+            return View(comment);
+        }
+
+        // POST: Comments/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditComment(int id, [Bind("ID,Header,Content,Location")] Comment comment)
+        {
+            if (id != comment.ID)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    comment.EditTime = DateTime.Now;
+                    _context.Entry(comment).Property(c => c.Header).IsModified = true;
+                    _context.Entry(comment).Property(c => c.EditTime).IsModified = true;
+                    _context.Entry(comment).Property(c => c.Content).IsModified = true;
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CommentExists(comment.ID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("../Locations/Details/" + comment.Location);
+            }
+            return View(comment);
+        }
+
+        // GET: Comments/Delete/5
+        public async Task<IActionResult> DeleteComment(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var comment = await _context.Comment
+                .SingleOrDefaultAsync(m => m.ID == id);
+            // Nor found if comment null or user is not owned the comment and not an admin
+            if (comment == null || (comment.User != User.Identity.Name && !User.IsInRole("Administrator")))
+            {
+                return NotFound();
+            }
+
+            return View(comment);
+        }
+
+        // POST: Comments/Delete/5
+        [HttpPost, ActionName("DeleteComment")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteCommentConfirmed(int id)
+        {
+            var comment = await _context.Comment.SingleOrDefaultAsync(m => m.ID == id);
+            _context.Comment.Remove(comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("../Locations/Details/" + comment.Location);
+        }
+
+        private bool CommentExists(int id)
+        {
+            return _context.Comment.Any(e => e.ID == id);
+        }
     }
+
+
 }

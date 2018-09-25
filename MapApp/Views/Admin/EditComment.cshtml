@@ -1,0 +1,45 @@
+@model MapApp.Models.CommentsModels.Comment
+
+@{
+    ViewData["Title"] = "Edit Comment";
+}
+
+<h2>Edit</h2>
+
+<form asp-action="EditComment">
+    <div class="form-horizontal">
+        <h4>Comment</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ID" />
+        <div class="form-group">
+            <label asp-for="Header" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Header" class="form-control" />
+                <span asp-validation-for="Header" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Content" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <textarea asp-for="Content" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input asp-for="User" value="@Model.User" type="hidden" />
+                <input asp-for="Location" value="@Model.Location" type="hidden" />
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="../Locations/Details/@Model.Location">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
