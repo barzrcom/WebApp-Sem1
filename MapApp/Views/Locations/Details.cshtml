@@ -31,6 +31,12 @@
             @Html.DisplayFor(model => model.Category)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Rating)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Latitude)
         </dt>
         <dd id="Latitude">
@@ -76,6 +82,9 @@
     <thead>
         <tr>
             <th>
+                Rating
+            </th>
+            <th>
                 Header
             </th>
             <th>
@@ -97,6 +106,9 @@
         @foreach (var item in ViewBag.Comments)
         {
             <tr>
+                <td>
+                    @item.Rating
+                </td>
                 <td>
                     @item.Header
                 </td>

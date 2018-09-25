@@ -13,6 +13,12 @@
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="ID" />
         <dt>
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Rating)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Header)
         </dt>
         <dd>
