@@ -50,9 +50,19 @@
 				}
 				<img src="@totalMessage" width="100" height="100" />
 			</td>
-			<td>
-				<a asp-action="Details" asp-route-id="@item.ID">Details</a>
-			</td>
+            <td>
+                @if (item.User == this.User.Identity.Name || this.User.IsInRole("Administrator"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> 
+                    @Html.Raw(" | ")
+                }
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a>
+                @if (item.User == this.User.Identity.Name || this.User.IsInRole("Administrator"))
+                {
+                    @Html.Raw(" | ")
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                }
+            </td>
 		</tr>
 }
     </tbody>
