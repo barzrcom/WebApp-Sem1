@@ -38,7 +38,9 @@ function refreshLocations() {
                 $('#barrating').barrating({
                     theme: 'fontawesome-stars-o',
                     readonly: true,
-                    initialRating: data.rating
+                    initialRating: data.rating,
+                    allowEmpty: true,
+                    emptyValue: 0
             });
                 });
         });
@@ -66,7 +68,8 @@ function FormatInfoWindowContent(data) {
         '<h2 id="firstHeading" class="firstHeading"><a href="Locations/Details/' + data.id +'">' + data.name +
 		'</a></h2><div id="bodyContent">' +
         '<p>' + description + '</p>' +
-        '<p> <select id="barrating"> <option value="1"> 1</option> <option value="2">2</option> <option value="3">3</option> <option value="4">4</option> <option value="5">5</option> </select > </p>' +
+        '<p> <select id="barrating"> <option value="0"> 0 </option> <option value="1"> 1</option> <option value="2">2</option> <option value="3">3</option> <option value="4">4</option> <option value="5">5</option> </select >'
+        + data.rating + '</p>' +
 		'<p>' + image + '</p>' +
 		'</div>' +
         '</div>';

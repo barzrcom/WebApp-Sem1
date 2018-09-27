@@ -48,6 +48,7 @@
                 </td>
                 <td>
                     <select id="barrating-@item.ID">
+                        <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -89,7 +90,9 @@
             $('#barrating-@item.ID').barrating({
                 theme: 'fontawesome-stars-o',
                 readonly: true,
-                initialRating: @item.Rating
+                initialRating: @item.Rating,
+                allowEmpty: true,
+                emptyValue: 0
             });
         });
         </script>
