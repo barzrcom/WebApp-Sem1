@@ -6,7 +6,9 @@
 
 <h2>Details</h2>
 <style>
-    .dl-horizontal dt { text-align: left; }
+    .dl-horizontal dt {
+        text-align: left;
+    }
 </style>
 <div class="row">
     <h4>Location</h4>
@@ -34,7 +36,13 @@
             @Html.DisplayNameFor(model => model.Rating)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Rating)
+            <select id="barrating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Latitude)
@@ -70,8 +78,8 @@
 </div>
 
 <div>
-	<a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-	<a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>
 
 <br />
@@ -107,7 +115,13 @@
         {
             <tr>
                 <td>
-                    @item.Rating
+                    <select id="barrating-@item.ID">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
                 </td>
                 <td>
                     @item.Header
@@ -125,9 +139,11 @@
                     @item.User
                 </td>
                 <td>
-                    @if (item.User == ViewBag.User || ViewBag.Admin) {<a asp-action="../Comments/Edit" asp-route-id="@item.ID">Edit</a> @Html.Raw(" | ")  }
+                    @if (item.User == ViewBag.User || ViewBag.Admin)
+                    {<a asp-action="../Comments/Edit" asp-route-id="@item.ID">Edit</a> @Html.Raw(" | ")}
                     <a asp-action="../Comments/Details" asp-route-id="@item.ID">Details</a>
-                    @if (item.User == ViewBag.User || ViewBag.Admin) {@Html.Raw(" | ")<a asp-action="../Comments/Delete" asp-route-id="@item.ID">Delete</a>  }
+                    @if (item.User == ViewBag.User || ViewBag.Admin)
+                    {@Html.Raw(" | ")<a asp-action="../Comments/Delete" asp-route-id="@item.ID">Delete</a>}
                 </td>
             </tr>
         }
@@ -135,20 +151,45 @@
 </table>
 
 <p>
-    @if (ViewBag.Doubled){ <span data-toggle="tooltip" title="You are allowed only one comment per lacation" style="color:gray">New comment</span> }
-    else{ <a asp-action="../Comments/Create" asp-route-loc_id="@Model.ID">New comment</a> }
+    @if (ViewBag.Doubled)
+    {<span data-toggle="tooltip" title="You are allowed only one comment per lacation" style="color:gray">New comment</span> }
+    else
+    { <a asp-action="../Comments/Create" asp-route-loc_id="@Model.ID">New comment</a>}
 </p>
 
 
 
 
 @section Scripts {
-	<script src="~/js/map.js"></script>
-	<script src="~/js/weather.js"></script>
+    <script src="~/js/map.js"></script>
+    <script src="~/js/weather.js"></script>
 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3iZKrhlbxVPKs2DgI4ADKcGKkEVXxtGw&callback=initMap">
-	</script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3iZKrhlbxVPKs2DgI4ADKcGKkEVXxtGw&callback=initMap">
+    </script>
 
-	<script src="~/js/location_details.js"></script>
+    <script src="~/js/location_details.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#barrating').barrating({
+                theme: 'fontawesome-stars-o',
+                readonly: true,
+                initialRating: @Model.Rating
+            });
+        });
+    </script>
+
+    @foreach (var item in ViewBag.Comments)
+    {
+        <script type="text/javascript">
+        $(function () {
+            $('#barrating-@item.ID').barrating({
+                theme: 'fontawesome-stars-o',
+                readonly: true,
+                initialRating: @item.Rating
+            });
+        });
+        </script>
+    }
 }
 

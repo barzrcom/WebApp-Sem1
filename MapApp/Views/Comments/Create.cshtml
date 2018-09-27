@@ -13,7 +13,7 @@
         <div class="form-group">
             <label asp-for="Rating" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Rating" class="form-control">
+                <select asp-for="Rating" id="barrating">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -53,4 +53,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/barrating.js"></script>
+
 }

@@ -33,7 +33,14 @@ function refreshLocations() {
 			var marker = new google.maps.Marker({ position: pos, map: map, title: data.name })
 			markerList.push(marker);
 			// Add click function to Marker
-			marker.addListener('click', function () { infowindow.open(map, marker); });
+            marker.addListener('click', function () { infowindow.open(map, marker); });
+            google.maps.event.addListener(infowindow, 'domready', function () {
+                $('#barrating').barrating({
+                    theme: 'fontawesome-stars-o',
+                    readonly: true,
+                    initialRating: data.rating
+            });
+                });
         });
 
     });
@@ -53,14 +60,15 @@ function FormatInfoWindowContent(data) {
 		var image = '<img id="preview_image" src="data:image;base64,' +
 			data.image + '" width="90px" height="90px" />';
 	} else { var image = "";}
-	var contentString = '<div id="content">' +
+    var contentString = '<div id="content">' +
 		'<div id="siteNotice">' +
 		'</div>' +
         '<h2 id="firstHeading" class="firstHeading"><a href="Locations/Details/' + data.id +'">' + data.name +
 		'</a></h2><div id="bodyContent">' +
-		'<p>' + description + '</p>' +
+        '<p>' + description + '</p>' +
+        '<p> <select id="barrating"> <option value="1"> 1</option> <option value="2">2</option> <option value="3">3</option> <option value="4">4</option> <option value="5">5</option> </select > </p>' +
 		'<p>' + image + '</p>' +
 		'</div>' +
-		'</div>';
+        '</div>';
 	return contentString;
 }

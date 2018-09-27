@@ -283,9 +283,9 @@ namespace MapApp.Controllers
             {
                 rate_avg = (float)result.Sum() / result.Count();
                 // Round the result to 0.5 jumps
-                if (rate_avg * 10 % 10 < 3)
+                if ((rate_avg * 10 % 10) < 3)
                     rate_avg = (int)rate_avg;
-                else if (rate_avg * 10 % 10 > 7)
+                else if ((rate_avg * 10 % 10) > 7)
                     rate_avg = (int)rate_avg + 1;
                 else
                     rate_avg = (int)rate_avg + (float)0.5;

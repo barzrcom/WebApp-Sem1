@@ -16,7 +16,13 @@
             @Html.DisplayNameFor(model => model.Rating)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Rating)
+            <select id="barrating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Header)
@@ -55,7 +61,7 @@
             @Html.DisplayFor(model => model.Location)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
@@ -63,3 +69,15 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $('#barrating').barrating({
+                theme: 'fontawesome-stars-o',
+                readonly: true,
+                initialRating: @Model.Rating
+            });
+        });
+    </script>
+}

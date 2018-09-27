@@ -14,7 +14,13 @@
             @Html.DisplayNameFor(model => model.Rating)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Rating)
+            <select id="barrating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Header)
@@ -55,6 +61,19 @@
     </dl>
 </div>
 <div>
-    @if(Model.User == this.User.Identity.Name || this.User.IsInRole("Administrator")){<a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> @Html.Raw(" | ")  }
+    @if (Model.User == this.User.Identity.Name || this.User.IsInRole("Administrator"))
+    {<a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> @Html.Raw(" | ")}
     <a asp-action="../Locations/Details/@Model.Location">Back to List</a>
 </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $('#barrating').barrating({
+                theme: 'fontawesome-stars-o',
+                readonly: true,
+                initialRating: @Model.Rating
+            });
+        });
+    </script>
+}
