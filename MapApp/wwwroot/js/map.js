@@ -35,14 +35,14 @@ function refreshLocations() {
 			// Add click function to Marker
             marker.addListener('click', function () { infowindow.open(map, marker); });
             google.maps.event.addListener(infowindow, 'domready', function () {
-                $('#barrating').barrating({
+                $('#barrating-' + data.id).barrating({
                     theme: 'fontawesome-stars-o',
                     readonly: true,
                     initialRating: data.rating,
                     allowEmpty: true,
                     emptyValue: 0
-            });
                 });
+            });
         });
 
     });
@@ -68,8 +68,7 @@ function FormatInfoWindowContent(data) {
         '<h2 id="firstHeading" class="firstHeading"><a href="Locations/Details/' + data.id +'">' + data.name +
 		'</a></h2><div id="bodyContent">' +
         '<p>' + description + '</p>' +
-        '<p> <select id="barrating"> <option value="0"> 0 </option> <option value="1"> 1</option> <option value="2">2</option> <option value="3">3</option> <option value="4">4</option> <option value="5">5</option> </select >'
-        + data.rating + '</p>' +
+        '<p> <select id="barrating-' + data.id +'" hidden> <option value="0"> 0 </option> <option value="1"> 1</option> <option value="2">2</option> <option value="3">3</option> <option value="4">4</option> <option value="5">5</option> </select >' + 
 		'<p>' + image + '</p>' +
 		'</div>' +
         '</div>';
