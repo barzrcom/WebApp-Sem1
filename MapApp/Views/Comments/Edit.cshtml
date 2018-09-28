@@ -37,7 +37,7 @@
 </form>
 
 <div>
-    <a asp-action="../Locations/Details/@Model.Location">Back to List</a>
+    <a asp-controller="Locations" asp-action="Details" asp-route-id="@Model.Location">Back to List</a>
 </div>
 
 @section Scripts {

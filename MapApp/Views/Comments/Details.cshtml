@@ -50,5 +50,5 @@
 </div>
 <div>
     @if(Model.User == this.User.Identity.Name || this.User.IsInRole("Administrator")){<a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> @Html.Raw(" | ")  }
-    <a asp-action="../Locations/Details/@Model.Location">Back to List</a>
+    <a asp-controller="Locations" asp-action="Details" asp-route-id="@Model.Location">Back to List</a>
 </div>
