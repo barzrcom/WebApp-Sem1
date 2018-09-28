@@ -26,5 +26,9 @@ namespace MapApp.Models.CommentsModels
 
         // The location the comment belongs to
         public int Location { get; set; }
+
+        [Range(1, 5)]
+        [Required]
+        public int Rating { get; set; }
     }
 }

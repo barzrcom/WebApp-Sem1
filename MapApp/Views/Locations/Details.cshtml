@@ -6,7 +6,9 @@
 
 <h2>Details</h2>
 <style>
-    .dl-horizontal dt { text-align: left; }
+    .dl-horizontal dt {
+        text-align: left;
+    }
 </style>
 <div class="row">
     <h4>Location</h4>
@@ -29,6 +31,19 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Category)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd>
+            <select id="barrating" hidden>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Latitude)
@@ -64,8 +79,8 @@
 </div>
 
 <div>
-	<a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-	<a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>
 
 <br />
@@ -75,6 +90,9 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                Rating
+            </th>
             <th>
                 Header
             </th>
@@ -97,6 +115,15 @@
         @foreach (var item in ViewBag.Comments)
         {
             <tr>
+                <td>
+                    <select id="barrating-@item.ID" hidden>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
                 <td>
                     @item.Header
                 </td>
@@ -123,7 +150,7 @@
 </table>
 
 <p>
-    @if (ViewBag.Doubled){ <span data-toggle="tooltip" title="You are allowed only one comment per lacation" style="color:gray">New comment</span> }
+    @if (ViewBag.Doubled){ <span data-toggle="tooltip" title="You are allowed only one comment per location" style="cursor: default; color:gray;">New comment</span> }
     else{ <a asp-controller="Comments" asp-action="Create" asp-route-loc_id="@Model.ID">New comment</a> }
 </p>
 
@@ -131,12 +158,37 @@
 
 
 @section Scripts {
-	<script src="~/js/map.js"></script>
-	<script src="~/js/weather.js"></script>
+    <script src="~/js/map.js"></script>
+    <script src="~/js/weather.js"></script>
 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3iZKrhlbxVPKs2DgI4ADKcGKkEVXxtGw&callback=initMap">
-	</script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3iZKrhlbxVPKs2DgI4ADKcGKkEVXxtGw&callback=initMap">
+    </script>
 
-	<script src="~/js/location_details.js"></script>
+    <script src="~/js/location_details.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#barrating').barrating({
+                theme: 'fontawesome-stars-o',
+                readonly: true,
+                initialRating: @Model.Rating,
+                allowEmpty: true,
+                emptyValue: 0
+            });
+        });
+    </script>
+
+    @foreach (var item in ViewBag.Comments)
+    {
+        <script type="text/javascript">
+        $(function () {
+            $('#barrating-@item.ID').barrating({
+                theme: 'fontawesome-stars-o',
+                readonly: true,
+                initialRating: @item.Rating
+            });
+        });
+        </script>
+    }
 }
 

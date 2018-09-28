@@ -8,9 +8,10 @@ using MapApp.Data;
 namespace MapApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180925194608_added_rating_comment_location")]
+    partial class added_rating_comment_location
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -110,7 +111,7 @@ namespace MapApp.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<float>("Rating");
+                    b.Property<int>("Rating");
 
                     b.Property<string>("User");
 

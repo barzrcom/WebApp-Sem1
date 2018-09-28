@@ -11,55 +11,56 @@
 		<h4>Location</h4>
 		<hr />
 		<div class="row">
-			<div class="col-sm-6">
-				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-				<input type="hidden" asp-for="ID" />
-				<div class="form-group">
-					<label asp-for="Name" class="col-md-2 control-label"></label>
-					<div class="col-md-10">
-						<input asp-for="Name" class="form-control" />
-						<span asp-validation-for="Name" class="text-danger"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label asp-for="Description" class="col-md-2 control-label"></label>
-					<div class="col-md-10">
-						<input asp-for="Description" class="form-control" />
-						<span asp-validation-for="Description" class="text-danger"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label asp-for="Category" class="col-md-2 control-label"></label>
-					<div class="col-md-10">
-						<select asp-for="Category" asp-items="Html.GetEnumSelectList<LocationCategory>()" class="form-control"></select>
-					</div>
-				</div>
-				<div class="form-group">
-					<label asp-for="Latitude" class="col-md-2 control-label"></label>
-					<div class="col-md-10">
-						<input asp-for="Latitude" class="form-control" readonly />
-						<span asp-validation-for="Latitude" class="text-danger"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label asp-for="Longitude" class="col-md-2 control-label"></label>
-					<div class="col-md-10">
-						<input asp-for="Longitude" class="form-control" readonly/>
-						<span asp-validation-for="Longitude" class="text-danger"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label asp-for="Image" class="col-md-2 control-label"></label>
-					<div class="col-md-10">
-						<input asp-for="Image" class="form-control" type="file" name="Image" />
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-md-offset-2 col-md-10">
-						<input type="submit" value="Save" class="btn btn-default" />
-					</div>
-				</div>
-			</div>
+            <div class="col-sm-6">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ID" />
+                <input type="hidden" asp-for="Rating" value="@Model.Rating" />
+                <div class="form-group">
+                    <label asp-for="Name" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Category" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <select asp-for="Category" asp-items="Html.GetEnumSelectList<LocationCategory>()" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Latitude" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Latitude" class="form-control" readonly />
+                        <span asp-validation-for="Latitude" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Longitude" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Longitude" class="form-control" readonly />
+                        <span asp-validation-for="Longitude" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Image" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Image" class="form-control" type="file" name="Image" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
 			<div class="col-sm-6"
 				<div id="map"></div>
 			</div>

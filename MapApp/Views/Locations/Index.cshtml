@@ -8,62 +8,93 @@
 
 <table class="table">
     <thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.Name)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.User)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Description)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Category)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Image)
-			</th>
-			<th></th>
-		</tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-		<tr>
-			<td>
-				@Html.DisplayFor(modelItem => item.Name)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.User)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Description)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Category)
-			</td>
-			<td>
-				@{
-				var totalMessage = "";
-				if (item.Image != null) { totalMessage += "data:image;base64, " + System.Convert.ToBase64String(item.Image); }
-				else { totalMessage += "/images/null_image.png"; };
-				}
-				<img src="@totalMessage" width="100" height="100" />
-			</td>
-            <td>
-                @if (item.User == this.User.Identity.Name || this.User.IsInRole("Administrator"))
-                {
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> 
-                    @Html.Raw(" | ")
-                }
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a>
-                @if (item.User == this.User.Identity.Name || this.User.IsInRole("Administrator"))
-                {
-                    @Html.Raw(" | ")
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                }
-            </td>
-		</tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    <select id="barrating-@item.ID" hidden>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+                <td>
+                    @{
+                        var totalMessage = "";
+                        if (item.Image != null) { totalMessage += "data:image;base64, " + System.Convert.ToBase64String(item.Image); }
+                        else { totalMessage += "/images/null_image.png"; };
+                    }
+                    <img src="@totalMessage" width="100" height="100" />
+                </td>
+                <td>
+                    @if (item.User == this.User.Identity.Name || this.User.IsInRole("Administrator"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                        @Html.Raw(" | ")
+                    }
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a>
+                    @if (item.User == this.User.Identity.Name || this.User.IsInRole("Administrator"))
+                    {
+                        @Html.Raw(" | ")
+                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@section Scripts {
+    @foreach (var item in Model)
+    {
+        <script type="text/javascript">
+        $(function () {
+            $('#barrating-@item.ID').barrating({
+                theme: 'fontawesome-stars-o',
+                readonly: true,
+                initialRating: @item.Rating,
+                allowEmpty: true,
+                emptyValue: 0
+            });
+        });
+        </script>
+    }
+}

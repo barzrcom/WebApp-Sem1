@@ -77,6 +77,9 @@ namespace MapApp.Controllers
             ViewBag.User = User.Identity.Name;
             ViewBag.Admin = User.IsInRole("Administrator");
 
+            // Updating rating value base on comments average
+            UpdateRating(comments, location);
+
             return View(location);
 
 		}
@@ -163,7 +166,7 @@ namespace MapApp.Controllers
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,Category,Latitude,Longitude")] Location location, IFormFile Image)
+		public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,Category,Latitude,Longitude,Rating")] Location location, IFormFile Image)
 		{
 			if (id != location.ID)
 			{
@@ -265,6 +268,34 @@ namespace MapApp.Controllers
         public IActionResult DoubleComment()
         {
             return View();
+        }
+
+        // Updating rating value base on comments average
+        public void UpdateRating(IEnumerable<Comment> comments, Location location)
+        {
+            var result =
+                from com in comments
+                where com.Location.Equals(location.ID)
+                select com.Rating;
+
+            float rate_avg;
+            if (result.Any())
+            {
+                rate_avg = (float)result.Sum() / result.Count();
+                // Round the result to 0.5 jumps
+                if ((rate_avg * 10 % 10) < 3)
+                    rate_avg = (int)rate_avg;
+                else if ((rate_avg * 10 % 10) > 7)
+                    rate_avg = (int)rate_avg + 1;
+                else
+                    rate_avg = (int)rate_avg + (float)0.5;
+            }
+            else
+                rate_avg = 0;
+
+
+            location.Rating = rate_avg;
+            _context.SaveChanges();
         }
 
     }

@@ -16,6 +16,8 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/lib/jquery-bar-rating-master/dist/themes/fontawesome-stars-o.css">
     @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body>
@@ -94,6 +96,8 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+
+    <script src="~/lib/jquery-bar-rating-master/dist/jquery.barrating.min.js"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

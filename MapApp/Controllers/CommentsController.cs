@@ -74,9 +74,10 @@ namespace MapApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Header,Content,User,Location")] Comment comment)
+        public async Task<IActionResult> Create([Bind("ID,Header,Content,User,Location,Rating")] Comment comment)
         {
-            if (IsDoubled(await _context.Comment.ToListAsync(), comment.Location, User.Identity.Name))
+            var comments = await _context.Comment.ToListAsync();
+            if (IsDoubled(comments, comment.Location, User.Identity.Name))
                 return RedirectToAction("DoubleComment");
 
 
@@ -112,7 +113,7 @@ namespace MapApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Header,Content,Location")] Comment comment)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Header,Content,Location,Rating")] Comment comment)
         {
             if (id != comment.ID)
             {
@@ -127,6 +128,7 @@ namespace MapApp.Controllers
                     _context.Entry(comment).Property(c => c.Header).IsModified = true;
                     _context.Entry(comment).Property(c => c.EditTime).IsModified = true;
                     _context.Entry(comment).Property(c => c.Content).IsModified = true;
+                    _context.Entry(comment).Property(c => c.Rating).IsModified = true;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -197,5 +199,6 @@ namespace MapApp.Controllers
             else
                 return false;
         }
+
     }
 }
