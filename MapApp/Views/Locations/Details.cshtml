@@ -113,9 +113,9 @@
                     @item.User
                 </td>
                 <td>
-                    @if(item.User == ViewBag.User || ViewBag.Admin){<a asp-action="../Comments/Edit" asp-route-id="@item.ID">Edit</a> @Html.Raw(" | ")  }
+                    @if (item.User == ViewBag.User || ViewBag.Admin) {<a asp-action="../Comments/Edit" asp-route-id="@item.ID">Edit</a> @Html.Raw(" | ")  }
                     <a asp-action="../Comments/Details" asp-route-id="@item.ID">Details</a>
-                    @if (item.User == ViewBag.User || ViewBag.Admin){@Html.Raw(" | ")<a asp-action="../Comments/Delete" asp-route-id="@item.ID">Delete</a>  }
+                    @if (item.User == ViewBag.User || ViewBag.Admin) {@Html.Raw(" | ")<a asp-action="../Comments/Delete" asp-route-id="@item.ID">Delete</a>  }
                 </td>
             </tr>
         }
@@ -123,7 +123,8 @@
 </table>
 
 <p>
-    <a asp-action="../Comments/Create" asp-route-loc_id="@Model.ID">New comment</a>
+    @if (ViewBag.Doubled){ <span data-toggle="tooltip" title="You are allowed only one comment per lacation" style="color:gray">New comment</span> }
+    else{ <a asp-action="../Comments/Create" asp-route-loc_id="@Model.ID">New comment</a> }
 </p>
 
 
