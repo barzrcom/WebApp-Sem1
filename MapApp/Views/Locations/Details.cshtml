@@ -36,7 +36,7 @@
             @Html.DisplayNameFor(model => model.Rating)
         </dt>
         <dd>
-            <select id="barrating">
+            <select id="barrating" hidden>
                 <option value="0">0</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -116,7 +116,7 @@
         {
             <tr>
                 <td>
-                    <select id="barrating-@item.ID">
+                    <select id="barrating-@item.ID" hidden>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -150,7 +150,7 @@
 </table>
 
 <p>
-    @if (ViewBag.Doubled){ <span data-toggle="tooltip" title="You are allowed only one comment per lacation" style="color:gray">New comment</span> }
+    @if (ViewBag.Doubled){ <span data-toggle="tooltip" title="You are allowed only one comment per location" style="cursor: default; color:gray;">New comment</span> }
     else{ <a asp-controller="Comments" asp-action="Create" asp-route-loc_id="@Model.ID">New comment</a> }
 </p>
 
