@@ -15,7 +15,9 @@
 			<th>
 				@Html.DisplayNameFor(model => model.UserName)
 			</th>
-			<th></th>
+			<th>
+                Roles
+            </th>
 		</tr>
     </thead>
     <tbody>
@@ -27,10 +29,24 @@
 			<td>
 				@Html.DisplayFor(modelItem => item.Email)
 			</td>
-		
-			<td>
-			    <a asp-action="DeleteUser" asp-route-id="@item.Id">Delete</a>
-			</td>
+            <td>
+
+                @{
+                    int index = 0;
+                    foreach (var v in item.Roles)
+                    {
+                        if (index++ > 0)
+                        {
+                            @Html.Raw(" | ");
+                        }
+                        @Html.Raw(ViewBag.RolesList[v.RoleId].Name)
+                    }
+                }
+            </td>
+            <td>
+                <a asp-action="DeleteUser" asp-route-id="@item.Id">Delete</a> |
+                <a asp-action="ManageUserRoles" asp-route-id="@item.Id">Manage Roles</a>
+            </td>
 		</tr>
 }
     </tbody>

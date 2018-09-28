@@ -9,6 +9,11 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using MapApp.Models.CommentsModels;
 using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using MapApp.Models;
+using System.Collections.Generic;
 
 namespace MapApp.Controllers
 {
@@ -16,16 +21,20 @@ namespace MapApp.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AdminController(ApplicationDbContext context)
+        public AdminController(ApplicationDbContext context, IServiceProvider serviceProvider)
         {
             _context = context;
+            _userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         }
 
         // GET: Admin/Users
         public async Task<IActionResult> Users()
         {
-            
+            var userRoles = _context.Roles.Include(r => r.Users).ToList();
+
+            ViewBag.RolesList = _context.Roles.ToDictionary(k => k.Id);
             return View(await _context.Users.ToListAsync());
         }
 
@@ -72,6 +81,59 @@ namespace MapApp.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Users");
         }
+
+        [Authorize]
+        // GET: Admin/ManageUserRole/5
+        public async Task<IActionResult> ManageUserRoles(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var userRoles = _context.Roles.Include(r => r.Users).ToList();
+
+            ViewBag.RolesList = _context.Roles.ToDictionary(k => k.Id);
+
+            return View(user);
+        }
+
+        // GET: Admin/DeleteLocation/5
+        public async Task<IActionResult> AddRole(string id, string role)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                var roleResult = await _userManager.AddToRoleAsync(user, role);
+            }
+            else
+            {
+                return NotFound();
+            }
+            return RedirectToAction("Users");
+        }
+
+        // GET: Admin/RemoveRole/5
+        public async Task<IActionResult> RemoveRole(string id, string role)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                var roleResult = await _userManager.RemoveFromRoleAsync(user, role);
+            }
+            else
+            {
+                return NotFound();
+            }
+            return RedirectToAction("Users");
+        }
+
 
         private async void UpdateCustomFields(Location location, IFormFile Image)
         {
@@ -229,7 +291,7 @@ namespace MapApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("../Locations/Details/" + comment.Location);
+                return RedirectToAction("Locations", "Details", new { id = comment.Location });
             }
             return View(comment);
         }
@@ -261,7 +323,7 @@ namespace MapApp.Controllers
             var comment = await _context.Comment.SingleOrDefaultAsync(m => m.ID == id);
             _context.Comment.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction("../Locations/Details/" + comment.Location);
+            return RedirectToAction("Locations", "Details", new { id = comment.Location });
         }
 
         private bool CommentExists(int id)

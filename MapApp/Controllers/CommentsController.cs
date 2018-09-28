@@ -86,7 +86,7 @@ namespace MapApp.Controllers
                 comment.EditTime = comment.CreateTime = DateTime.Now;
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("../Locations/Details/"+comment.Location);
+                return RedirectToAction("Details", "Locations", new { id = comment.Location });
             }
             return View(comment);
         }
@@ -142,7 +142,7 @@ namespace MapApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("../Locations/Details/" + comment.Location);
+                return RedirectToAction("Details", "Locations", new { id = comment.Location });
             }
             return View(comment);
         }
@@ -174,7 +174,7 @@ namespace MapApp.Controllers
             var comment = await _context.Comment.SingleOrDefaultAsync(m => m.ID == id);
             _context.Comment.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction("../Locations/Details/" + comment.Location);
+            return RedirectToAction("Details", "Locations", new { id = comment.Location });
         }
 
         private bool CommentExists(int id)
