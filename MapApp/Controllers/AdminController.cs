@@ -23,10 +23,10 @@ namespace MapApp.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public AdminController(ApplicationDbContext context, IServiceProvider serviceProvider)
+        public AdminController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
-            _userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            _userManager = userManager;
         }
 
         // GET: Admin/Users
