@@ -32,9 +32,14 @@
             <td>
 
                 @{
+                    int index = 0;
                     foreach (var v in item.Roles)
                     {
-                        @Html.Raw(ViewBag.RolesList[v.RoleId].Name + " | ")
+                        if (index++ > 0)
+                        {
+                            @Html.Raw(" | ");
+                        }
+                        @Html.Raw(ViewBag.RolesList[v.RoleId].Name)
                     }
                 }
             </td>
