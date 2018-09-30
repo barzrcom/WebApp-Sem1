@@ -32,8 +32,20 @@ namespace MapApp.Controllers
 			return View(await _context.Location.ToListAsync());
 		}
 
-		// GET: Locations
-		public async Task<IActionResult> Data()
+        public async Task<IActionResult> NameFilter(string name)
+        {
+            if (!String.IsNullOrEmpty(name))
+            {
+                return View("Index", (await _context.Location.ToListAsync()).Where(s => s.Name.Contains(name)));
+            }
+            else
+            {
+                return View("Index", new Location[0]);
+            }
+        }
+
+        // GET: Locations
+        public async Task<IActionResult> Data()
 		{
 			return Json(await _context.Location.ToListAsync());
 		}
