@@ -42,7 +42,7 @@ namespace MapApp.Controllers
 		// GET: MyLocationsIndex
 		public async Task<IActionResult> MyLocationsIndex()
 		{
-			return View((await _context.Location.ToListAsync()).Where(s => s.User == User.Identity.Name));
+            return View("Index", (await _context.Location.ToListAsync()).Where(s => s.User == User.Identity.Name));
 		}
 
 		[Authorize]
