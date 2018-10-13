@@ -41,13 +41,12 @@ namespace MapApp.Controllers
         public async Task<IActionResult> ML(int? id)
         {
 
-            double[][] inputs = {
-                new double[] { 0,5 },
-                new double[] { 0,4 },
-                new double[] { 1,1 },
-                new double[] { 2,1 }
+            List<double[]> inputs = new List<double[]>();
+            inputs.Add(new double[] { 0, 5 });
+            inputs.Add(new double[] { 0, 4 });
+            inputs.Add(new double[] { 1, 1 });
+            inputs.Add(new double[] { 2, 1 });
 
-            };
 
             //inputs.Append<double[]>(new double[] { 52, 0 }); //not working
 
@@ -59,19 +58,18 @@ namespace MapApp.Controllers
                 from c in comments
                 join l in locations on c.Location equals l.ID
                 where c.User.Equals(User.Identity.Name)
-                select new { l.Category, L_Rating = l.Rating, C_Rating = c.Rating }; 
+                select new { l.Category, L_Rating = l.Rating, C_Rating = c.Rating };
 
             //result.ToList().ForEach(r => inputs.Append<double[]>(new double[] { r.Category.GetHashCode(), r.C_Rating }));
 
-            double[][] test = {
-                new double[] { 0,1 },
-                new double[] { 0,2 },
-                new double[] { 0,3 },
-                new double[] { 0,4 },
-                new double[] { 1,5 },
-                new double[] { 1,2 }
+            List<double[]> test = new List<double[]>();
+            test.Add(new double[] { 0, 1 });
+            test.Add(new double[] { 0, 2 });
+            test.Add(new double[] { 0, 3 });
+            test.Add(new double[] { 0, 4 });
+            test.Add(new double[] { 1, 5 });
+            test.Add(new double[] { 1, 2 });
 
-            };
 
 
             int[] outputs = { 1, 1, 0, 0 };
@@ -85,10 +83,10 @@ namespace MapApp.Controllers
             };
 
             // Teach the vector machine
-            var svm = teacher.Learn(inputs, outputs);
+            var svm = teacher.Learn(inputs.ToArray(), outputs);
 
             // Classify the samples using the model
-            bool[] answers = svm.Decide(test);
+            bool[] answers = svm.Decide(test.ToArray());
 
             return null;
 
