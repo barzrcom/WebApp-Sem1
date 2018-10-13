@@ -38,12 +38,6 @@ namespace MapApp.Controllers
             return View();
         }
 
-        class CategoryRate
-        {
-            public LocationCategory lc { get; set; }
-            public float l_rating { get; set; }
-            public float c_rating { get; set; }
-        }
         public async Task<IActionResult> ML(int? id)
         {
 
@@ -64,8 +58,9 @@ namespace MapApp.Controllers
                 from c in comments
                 join l in locations on c.Location equals l.ID
                 where c.User.Equals(User.Identity.Name)
-                select new CategoryRate { lc=l.Category, l_rating = l.Rating, c_rating = c.Rating };
-
+                select new { lc=l.Category, l_rating = l.Rating, c_rating = c.Rating };
+            List<double[]> inputs_2 = new List<double[]>();
+            result.ToList().ForEach(r => inputs_2.Add(new double[] { r.l_rating, r.c_rating}));
             //result.ToList().ForEach(r => inputs.Append<double[]>(new double[] { r.Category.GetHashCode(), r.C_Rating }));
 
             List<double[]> test = new List<double[]>();
