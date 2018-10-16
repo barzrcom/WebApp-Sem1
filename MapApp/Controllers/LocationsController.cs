@@ -50,7 +50,13 @@ namespace MapApp.Controllers
 			return Json(await _context.Location.ToListAsync());
 		}
 
-		[Authorize]
+        // GET: Categories
+        public async Task<IActionResult> Categories()
+        {
+                return Json(Enum.GetNames(typeof(LocationCategory)));
+        }
+
+        [Authorize]
 		// GET: MyLocationsIndex
 		public async Task<IActionResult> MyLocationsIndex()
 		{
