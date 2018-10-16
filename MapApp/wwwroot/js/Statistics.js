@@ -20,12 +20,12 @@
         }
     };
 
-    location_category = [
-        "ViewPoint",
-        "Restaurant",
-        "Museum"
-    ]
+    location_category = []
 
+    // get Categories dynamicly
+    $.get("/Locations/Categories", function (data) {
+        location_category = data;
+    });
     
     $.get("/Locations/Data", function (data) {
         category_counter = {}
