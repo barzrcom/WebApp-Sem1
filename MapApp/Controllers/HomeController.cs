@@ -16,9 +16,9 @@ namespace MapApp.Controllers
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Statistics()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = "Your Statistics page.";
 
             return View();
         }
