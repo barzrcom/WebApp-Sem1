@@ -23,9 +23,15 @@ namespace MapApp.Controllers
 
         [Authorize(Roles = "Administrator")]
         // GET: Comments
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string header, string content, string user)
         {
-            return View(await _context.Comment.ToListAsync());
+            var comments = await _context.Comment.ToListAsync();
+
+            if (!String.IsNullOrEmpty(header)) comments = comments.Where(s => s.Header.Contains(header)).ToList();
+            if (!String.IsNullOrEmpty(content)) comments = comments.Where(s => s.Content.Contains(content)).ToList();
+            if (!String.IsNullOrEmpty(user)) comments = comments.Where(s => s.User.Contains(user)).ToList();
+
+            return View(comments);
         }
 
         // GET: Comments/Details/5

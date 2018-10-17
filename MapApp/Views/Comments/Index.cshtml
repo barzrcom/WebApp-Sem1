@@ -7,7 +7,7 @@
 <h2>Index</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-success" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -37,7 +37,25 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    <form asp-controller="Comments" asp-action="Index" method="get">
+        <tr>
+            <td />
+            <td>
+                <input type="text" name="header">
+            </td>
+            <td>
+                <input type="text" name="content">
+            </td>
+            <td />
+            <td />
+            <td>
+                <input type="text" name="user">
+            </td>
+        </tr>
+        <input class="btn btn-primary" type="submit" value="Filter" />
+    </form>
+    @foreach (var item in Model)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Rating)
@@ -60,12 +78,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Location)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            <td style='white-space: nowrap'>
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>

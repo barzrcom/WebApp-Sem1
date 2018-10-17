@@ -79,8 +79,8 @@
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a class="btn btn-default" asp-action="Index">Back to List</a>
 </div>
 
 <br />
@@ -112,6 +112,23 @@
         </tr>
     </thead>
     <tbody>
+        <form asp-controller="Locations" asp-action="Details" asp-route-id="@Model.ID" method="get">
+            <tr>
+                <td />
+                <td>
+                    <input type="text" name="header">
+                </td>
+                <td>
+                    <input type="text" name="content">
+                </td>
+                <td />
+                <td />
+                <td>
+                    <input type="text" name="user">
+                </td>
+            </tr>
+            <input class="btn btn-primary" type="submit" value="Filter" />
+        </form>
         @foreach (var item in ViewBag.Comments)
         {
             <tr>
@@ -139,10 +156,17 @@
                 <td>
                     @item.User
                 </td>
-                <td>
-                    @if (item.User == ViewBag.User || ViewBag.Admin) {<a asp-controller="Comments" asp-action="Edit" asp-route-id="@item.ID">Edit</a> @Html.Raw(" | ")  }
-                    <a asp-controller="Comments" asp-action="Details" asp-route-id="@item.ID">Details</a>
-                    @if (item.User == ViewBag.User || ViewBag.Admin) {@Html.Raw(" | ")<a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.ID">Delete</a>  }
+                <td style='white-space: nowrap'>
+                    @if (item.User == ViewBag.User || ViewBag.Admin)
+                    {
+                        <a class="btn btn-primary" asp-controller="Comments" asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                        @Html.Raw(" | ")
+                    }
+                    <a class="btn btn-success" asp-controller="Comments" asp-action="Details" asp-route-id="@item.ID">Details</a>
+                    @if (item.User == ViewBag.User || ViewBag.Admin)
+                    {
+                        @Html.Raw(" | ")<a class="btn btn-danger" asp-controller="Comments" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    }
                 </td>
             </tr>
         }
@@ -150,8 +174,14 @@
 </table>
 
 <p>
-    @if (ViewBag.Doubled){ <span data-toggle="tooltip" title="You are allowed only one comment per location" style="cursor: default; color:gray;">New comment</span> }
-    else{ <a asp-controller="Comments" asp-action="Create" asp-route-loc_id="@Model.ID">New comment</a> }
+    @if (ViewBag.Doubled)
+    {
+        <a class="btn btn-default" data-toggle="tooltip" title="You are allowed only one comment per location" disabled>New comment</a>
+    }
+    else
+    {
+        <a class="btn btn-success" asp-controller="Comments" asp-action="Create" asp-route-loc_id="@Model.ID">New comment</a>
+    }
 </p>
 
 

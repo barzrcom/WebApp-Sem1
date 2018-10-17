@@ -30,12 +30,16 @@ namespace MapApp.Controllers
         }
 
         // GET: Admin/Users
-        public async Task<IActionResult> Users()
+        public async Task<IActionResult> Users(string id, string user)
         {
+            var users = await _context.Users.ToListAsync();
             var userRoles = _context.Roles.Include(r => r.Users).ToList();
-
             ViewBag.RolesList = _context.Roles.ToDictionary(k => k.Id);
-            return View(await _context.Users.ToListAsync());
+
+            if (!String.IsNullOrEmpty(id)) users = users.Where(s => s.Id.Contains(id)).ToList();
+            if (!String.IsNullOrEmpty(user)) users = users.Where(s => s.UserName.Contains(user)).ToList();
+
+            return View(users);
         }
 
         // GET: Admin/Locations
