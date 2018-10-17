@@ -12,17 +12,19 @@
         <div id="map"></div>
     </div>
     <br>
-    <button id="refresh_locations" class="btn btn-primary fa fa-refresh"></button>
-    <button id="clear_locations" class="btn btn-danger fa fa-times"></button>
+    <div class="panel-footer">
+        <button id="refresh_locations" class="btn btn-primary fa fa-refresh"></button>
+        <button id="clear_locations" class="btn btn-danger fa fa-times"></button>
+    </div>
 
-</div>
-@section Scripts {
-    <script src="~/js/map.js"></script>
+    </div>
+    @section Scripts {
+        <script src="~/js/map.js"></script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3iZKrhlbxVPKs2DgI4ADKcGKkEVXxtGw&callback=initMap">
-    </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3iZKrhlbxVPKs2DgI4ADKcGKkEVXxtGw&callback=initMap">
+        </script>
 
-    <script src="~/js/index.js"></script>
+        <script src="~/js/index.js"></script>
 
 
-}
+    }
