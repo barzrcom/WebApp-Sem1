@@ -27,22 +27,18 @@ namespace MapApp.Controllers
         }
 
 		// GET: Locations
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(string name, string user, string description, string category)
 		{
-			return View(await _context.Location.ToListAsync());
-		}
+		    var locations = await _context.Location.ToListAsync();
 
-        public async Task<IActionResult> NameFilter(string name)
-        {
-            if (!String.IsNullOrEmpty(name))
-            {
-                return View("Index", (await _context.Location.ToListAsync()).Where(s => s.Name.Contains(name)));
-            }
-            else
-            {
-                return View("Index", new Location[0]);
-            }
-        }
+		    if (!String.IsNullOrEmpty(name)) locations = locations.Where(s => s.Name.Contains(name)).ToList();
+		    if (!String.IsNullOrEmpty(user)) locations = locations.Where(s => s.User.Contains(user)).ToList();
+		    if (!String.IsNullOrEmpty(description)) locations = locations.Where(s => s.Description.Contains(description)).ToList();
+		    LocationCategory lc;
+            if (!String.IsNullOrEmpty(category) && Enum.TryParse(category, true, out lc)) locations = locations.Where(s => s.Category.Equals(lc)).ToList();
+
+            return View(locations);
+		}
 
         // GET: Locations
         public async Task<IActionResult> Data()
@@ -51,15 +47,8 @@ namespace MapApp.Controllers
 		}
 
 		[Authorize]
-		// GET: MyLocationsIndex
-		public async Task<IActionResult> MyLocationsIndex()
-		{
-            return View("Index", (await _context.Location.ToListAsync()).Where(s => s.User == User.Identity.Name));
-		}
-
-		[Authorize]
 		// GET: Locations/Details/5
-		public async Task<IActionResult> Details(int? id)
+		public async Task<IActionResult> Details(int? id, string header, string content, string user)
 		{
 
 			if (id == null)
@@ -75,17 +64,18 @@ namespace MapApp.Controllers
 			}
 
             // Gets the location's comments
-            var comments = await _context.Comment.ToListAsync();
-            var result =
-                from com in comments
-                where com.Location.Equals(id)
-                select com;
+            var comments = await _context.Comment.Where(c => c.Location == id).ToListAsync();
+
+            if (!String.IsNullOrEmpty(header)) comments = comments.Where(s => s.Header.Contains(header)).ToList();
+		    if (!String.IsNullOrEmpty(content)) comments = comments.Where(s => s.Content.Contains(content)).ToList();
+		    if (!String.IsNullOrEmpty(user)) comments = comments.Where(s => s.User.Contains(user)).ToList();
+
 
             ViewBag.Doubled = false;
             if (CommentsController.IsDoubled(comments, id, User.Identity.Name))
                 ViewBag.Doubled = true;
 
-            ViewBag.Comments = result;
+            ViewBag.Comments = comments;
             ViewBag.User = User.Identity.Name;
             ViewBag.Admin = User.IsInRole("Administrator");
 

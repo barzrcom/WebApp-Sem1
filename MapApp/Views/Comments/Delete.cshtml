@@ -64,8 +64,8 @@
 
     <form asp-action="Delete">
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-controller="Locations" asp-action="Details" asp-route-id="@ViewBag.loc_id">Back to List</a>
+            <input class="btn btn-danger" type="submit" value="Delete" class="btn btn-default" /> |
+            <a class="btn btn-default" asp-controller="Locations" asp-action="Details" asp-route-id="@ViewBag.loc_id">Back to List</a>
         </div>
     </form>
 </div>

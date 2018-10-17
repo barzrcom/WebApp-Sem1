@@ -21,14 +21,30 @@
 		</tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-		<tr>
-			<td>
-				@Html.DisplayFor(modelItem => item.Id)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Email)
-			</td>
+    <form asp-controller="Admin" asp-action="Users" method="get">
+        <tr>
+            <td>
+                <input type="text" name="id">
+            </td>
+            <td>
+                <input type="text" name="user">
+            </td>
+            <td />
+
+            <td />
+
+        </tr>
+        <input class="btn btn-primary" type="submit" value="Filter" />
+    </form>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
             <td>
 
                 @{
@@ -37,17 +53,19 @@
                     {
                         if (index++ > 0)
                         {
-                            @Html.Raw(" | ");
+                            @Html.Raw(" | ")
+                            ;
                         }
                         @Html.Raw(ViewBag.RolesList[v.RoleId].Name)
                     }
                 }
             </td>
+
             <td>
-                <a asp-action="DeleteUser" asp-route-id="@item.Id">Delete</a> |
-                <a asp-action="ManageUserRoles" asp-route-id="@item.Id">Manage Roles</a>
+                <a class="btn btn-primary" asp-action="ManageUserRoles" asp-route-id="@item.Id">Manage Roles</a> |
+                <a class="btn btn-danger" asp-action="DeleteUser" asp-route-id="@item.Id">Delete</a>
             </td>
-		</tr>
-}
+        </tr>
+    }
     </tbody>
 </table>
