@@ -37,19 +37,23 @@
         <form asp-controller="Locations" asp-action="Index" method="get">
             <tr>
                 <td>
-                    <input type="text" name="name">
+                    <input type="text" name="name" value="@(Context.Request.Query["name"])">
                 </td>
                 <td>
-                    <input type="text" name="user">
+                    <input type="text" name="user" value="@(Context.Request.Query["user"])">
                 </td>
                 <td>
-                    <input type="text" name="description">
+                    <input type="text" name="description" value="@(Context.Request.Query["description"])">
                 </td>
                 <td>
-                    <input type="text" name="category">
+                    <input type="text" name="category" value="@(Context.Request.Query["category"])">
+                </td>
+                <td />
+                <td />
+                <td>
+                    <input class="btn btn-primary" type="submit" value="Filter" />
                 </td>
             </tr>
-            <input class="btn btn-primary" type="submit" value="Filter" />
         </form>
     @foreach (var item in Model)
     {
