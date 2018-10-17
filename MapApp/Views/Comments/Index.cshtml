@@ -41,18 +41,21 @@
         <tr>
             <td />
             <td>
-                <input type="text" name="header">
+                <input type="text" name="header" value="@(Context.Request.Query["header"])">
             </td>
             <td>
-                <input type="text" name="content">
+                <input type="text" name="content" value="@(Context.Request.Query["content"])">
             </td>
             <td />
             <td />
             <td>
-                <input type="text" name="user">
+                <input type="text" name="user" value="@(Context.Request.Query["user"])">
+            </td>
+            <td>
+                <input class="btn btn-primary" type="submit" value="Filter" />
             </td>
         </tr>
-        <input class="btn btn-primary" type="submit" value="Filter" />
+        
     </form>
     @foreach (var item in Model)
     {

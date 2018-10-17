@@ -24,17 +24,18 @@
     <form asp-controller="Admin" asp-action="Users" method="get">
         <tr>
             <td>
-                <input type="text" name="id">
+                <input type="text" name="id" value="@(Context.Request.Query["id"])">
             </td>
             <td>
-                <input type="text" name="user">
+                <input type="text" name="user" value="@(Context.Request.Query["user"])">
             </td>
             <td />
 
-            <td />
-
+            <td>
+                <input class="btn btn-primary" type="submit" value="Filter" />
+            </td>
         </tr>
-        <input class="btn btn-primary" type="submit" value="Filter" />
+        
     </form>
     @foreach (var item in Model)
     {
