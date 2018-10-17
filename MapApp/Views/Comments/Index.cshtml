@@ -12,82 +12,110 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Rating)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Header)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Content)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CreateTime)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EditTime)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.User)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Location)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Header)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EditTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-    <form asp-controller="Comments" asp-action="Index" method="get">
-        <tr>
-            <td />
-            <td>
-                <input type="text" name="header" value="@(Context.Request.Query["header"])">
-            </td>
-            <td>
-                <input type="text" name="content" value="@(Context.Request.Query["content"])">
-            </td>
-            <td />
-            <td />
-            <td>
-                <input type="text" name="user" value="@(Context.Request.Query["user"])">
-            </td>
-            <td/>
-            <td>
-                <button class="btn btn-primary fa fa-search" type="submit" />
-            </td>
-        </tr>
-        
-    </form>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Header)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EditTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td style='white-space: nowrap'>
-                <a class="btn btn-primary fa fa-pencil" asp-action="Edit" asp-route-id="@item.ID"></a>
-                <a class="btn btn-success fa fa-info" asp-action="Details" asp-route-id="@item.ID"></a>
-                <a class="btn btn-danger fa fa-times" asp-action="Delete" asp-route-id="@item.ID"></a>
-            </td>
-        </tr>
-    }
+        <form asp-controller="Comments" asp-action="Index" method="get">
+            <tr>
+                <td />
+                <td>
+                    <input type="text" name="header" value="@(Context.Request.Query["header"])">
+                </td>
+                <td>
+                    <input type="text" name="content" value="@(Context.Request.Query["content"])">
+                </td>
+                <td />
+                <td />
+                <td>
+                    <input type="text" name="user" value="@(Context.Request.Query["user"])">
+                </td>
+                <td />
+                <td>
+                    <button class="btn btn-primary fa fa-search" type="submit" />
+                </td>
+            </tr>
+
+        </form>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <select id="barrating-@item.ID" hidden>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Header)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EditTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                <td style='white-space: nowrap'>
+                    <a class="btn btn-primary fa fa-pencil" asp-action="Edit" asp-route-id="@item.ID"></a>
+                    <a class="btn btn-success fa fa-info" asp-action="Details" asp-route-id="@item.ID"></a>
+                    <a class="btn btn-danger fa fa-times" asp-action="Delete" asp-route-id="@item.ID"></a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+
+
+
+@section Scripts {
+    @foreach (var item in Model)
+    {
+        <script type="text/javascript">
+        $(function () {
+            $('#barrating-@item.ID').barrating({
+                theme: 'fontawesome-stars-o',
+                readonly: true,
+                initialRating: @item.Rating,
+                allowEmpty: true,
+                emptyValue: 0
+            });
+        });
+        </script>
+    }
+}
