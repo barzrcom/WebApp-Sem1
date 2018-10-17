@@ -54,16 +54,18 @@
                     {
                         if (index++ > 0)
                         {
-                            @Html.Raw(" | ")
-                            ;
+                            @Html.Raw(" | ");
+
                         }
-                        @Html.Raw(ViewBag.RolesList[v.RoleId].Name)
+                        <span class="label label-default">
+                            @Html.Raw(ViewBag.RolesList[v.RoleId].Name)
+                        </span>
                     }
                 }
             </td>
 
             <td>
-                <a class="btn btn-primary fa fa-pencil" asp-action="ManageUserRoles" asp-route-id="@item.Id"></a> |
+                <a class="btn btn-primary fa fa-pencil" asp-action="ManageUserRoles" asp-route-id="@item.Id"></a>
                 <a class="btn btn-danger fa fa-times" asp-action="DeleteUser" asp-route-id="@item.Id"></a>
             </td>
         </tr>
