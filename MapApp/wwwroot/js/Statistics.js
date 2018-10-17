@@ -25,18 +25,7 @@
     // get Categories dynamicly
     $.get("/Locations/Categories", function (data) {
         location_category = data;
-    });
-    
-    $.get("/Locations/Data", function (data) {
-        category_counter = {}
-        $.each(data, function (index, data) {
-            if (!(data.category in category_counter)) {
-                category_counter[data.category.toString()] = 1;
-            } else {
-                category_counter[data.category.toString()] += 1;
-            }
-        });
-
+ 
         chartdata = {
             datasets: [{
                 data: [],
@@ -61,9 +50,9 @@
         };
  
 
-        $.each(category_counter, function (key, value) {
+        $.each(location_category, function (key, value) {
             chartdata.datasets[0].data.push(value);
-            chartdata.labels.push(location_category[key]);
+            chartdata.labels.push(key);
         });
 
 
