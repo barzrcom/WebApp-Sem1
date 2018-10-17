@@ -46,11 +46,14 @@ namespace MapApp.Controllers
 			return Json(await _context.Location.ToListAsync());
 		}
 
-    // GET: Categories
-    public async Task<IActionResult> Categories()
-    {
-            return Json(Enum.GetNames(typeof(LocationCategory)));
-    }
+        // GET: Categories
+        public async Task<IActionResult> Categories()
+        {
+                var categories = await _context.Location.GroupBy(l => l.Category)
+                    .ToDictionaryAsync(g => Enum.GetName(typeof(LocationCategory), g.Key), g => g.Count());
+
+                return Json(categories);
+        }
 
 		[Authorize]
 		// GET: Locations/Details/5
