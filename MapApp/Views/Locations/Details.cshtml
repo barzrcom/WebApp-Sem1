@@ -163,12 +163,11 @@
                     @if (item.User == ViewBag.User || ViewBag.Admin)
                     {
                         <a class="btn btn-primary fa fa-pencil" asp-controller="Comments" asp-action="Edit" asp-route-id="@item.ID"></a>
-                        @Html.Raw(" | ")
                     }
                     <a class="btn btn-success fa fa-info" asp-controller="Comments" asp-action="Details" asp-route-id="@item.ID"></a>
                     @if (item.User == ViewBag.User || ViewBag.Admin)
                     {
-                        @Html.Raw(" | ")<a class="btn btn-danger fa fa-times" asp-controller="Comments" asp-action="Delete" asp-route-id="@item.ID"></a>
+                        <a class="btn btn-danger fa fa-times" asp-controller="Comments" asp-action="Delete" asp-route-id="@item.ID"></a>
                     }
                 </td>
             </tr>
