@@ -99,12 +99,10 @@
                 @if (item.User == this.User.Identity.Name || this.User.IsInRole("Administrator"))
                 {
                     <a class="btn btn-primary fa fa-pencil"  asp-action="Edit" asp-route-id="@item.ID"></a>
-                    @Html.Raw(" | ")
                 }
                 <a class="btn btn-success fa fa-info"  asp-action="Details" asp-route-id="@item.ID"></a>
                 @if (item.User == this.User.Identity.Name || this.User.IsInRole("Administrator"))
                 {
-                    @Html.Raw(" | ")
                     <a class="btn btn-danger fa fa-times"  asp-action="Delete" asp-route-id="@item.ID"></a>
                 }
             </td>
