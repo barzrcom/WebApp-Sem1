@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MapApp.Data;
 using MapApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace MapApp.Controllers
 {
@@ -21,6 +22,25 @@ namespace MapApp.Controllers
         public async Task<IActionResult> Index()
         {
             return Json(await _context.View.ToListAsync());
+        }
+
+        // GET: Categories
+        public async Task<IActionResult> ByLocation()
+        {
+            var query = await _context.Location.Join(
+                _context.View, l => l.ID, v => v.LocationId,
+                (location, view) => new { id = location.ID, name = location.Name })
+                .GroupBy(l => l.id, l => l.name)
+                .ToDictionaryAsync(g => g.Key.ToString(), g =>  g.Count());
+            return Json(query);
+        }
+
+        public async Task<IActionResult> ByDate()
+        {
+            var query = await _context.View.GroupBy(l => new DateTime(l.Date.Year, l.Date.Month, l.Date.Day))
+                  .ToDictionaryAsync(g => g.Key, g => g.Count());
+
+            return Json(query);
         }
 
         // GET: Views/Details/5
