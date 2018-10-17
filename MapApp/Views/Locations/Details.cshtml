@@ -79,7 +79,7 @@
 </div>
 
 <div>
-    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a class="btn btn-primary fa fa-pencil" asp-action="Edit" asp-route-id="@Model.ID"></a> |
     <a class="btn btn-default" asp-action="Index">Back to List</a>
 </div>
 
@@ -127,7 +127,7 @@
                     <input type="text" name="user" value="@(Context.Request.Query["user"])">
                 </td>
                 <td>
-                    <input class="btn btn-primary" type="submit" value="Filter" />
+                    <button class="btn btn-primary fa fa-search" type="submit" />
                 </td>
             </tr>
             
@@ -162,13 +162,13 @@
                 <td style='white-space: nowrap'>
                     @if (item.User == ViewBag.User || ViewBag.Admin)
                     {
-                        <a class="btn btn-primary" asp-controller="Comments" asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                        <a class="btn btn-primary fa fa-pencil" asp-controller="Comments" asp-action="Edit" asp-route-id="@item.ID"></a>
                         @Html.Raw(" | ")
                     }
-                    <a class="btn btn-success" asp-controller="Comments" asp-action="Details" asp-route-id="@item.ID">Details</a>
+                    <a class="btn btn-success fa fa-info" asp-controller="Comments" asp-action="Details" asp-route-id="@item.ID"></a>
                     @if (item.User == ViewBag.User || ViewBag.Admin)
                     {
-                        @Html.Raw(" | ")<a class="btn btn-danger" asp-controller="Comments" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                        @Html.Raw(" | ")<a class="btn btn-danger fa fa-times" asp-controller="Comments" asp-action="Delete" asp-route-id="@item.ID"></a>
                     }
                 </td>
             </tr>
@@ -179,11 +179,11 @@
 <p>
     @if (ViewBag.Doubled)
     {
-        <a class="btn btn-default" data-toggle="tooltip" title="You are allowed only one comment per location" disabled>New comment</a>
+        <a class="btn btn-default fa fa-plus" data-toggle="tooltip" title="You are allowed only one comment per location" disabled></a>
     }
     else
     {
-        <a class="btn btn-success" asp-controller="Comments" asp-action="Create" asp-route-loc_id="@Model.ID">New comment</a>
+        <a class="btn btn-success fa fa-plus" asp-controller="Comments" asp-action="Create" asp-route-loc_id="@Model.ID"></a>
     }
 </p>
 

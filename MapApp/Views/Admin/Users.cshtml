@@ -32,7 +32,7 @@
             <td />
 
             <td>
-                <input class="btn btn-primary" type="submit" value="Filter" />
+                <button class="btn btn-primary fa fa-search" type="submit"  />
             </td>
         </tr>
         
@@ -63,8 +63,8 @@
             </td>
 
             <td>
-                <a class="btn btn-primary" asp-action="ManageUserRoles" asp-route-id="@item.Id">Manage Roles</a> |
-                <a class="btn btn-danger" asp-action="DeleteUser" asp-route-id="@item.Id">Delete</a>
+                <a class="btn btn-primary fa fa-pencil" asp-action="ManageUserRoles" asp-route-id="@item.Id"></a> |
+                <a class="btn btn-danger fa fa-times" asp-action="DeleteUser" asp-route-id="@item.Id"></a>
             </td>
         </tr>
     }
