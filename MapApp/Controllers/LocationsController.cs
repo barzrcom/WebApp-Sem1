@@ -92,15 +92,14 @@ namespace MapApp.Controllers
             // Updating rating value base on comments average
             UpdateRating(comments, location);
 
-			// Increase "View" counter
-			View view_data = new View()
-			{
-				ID = 1,
-				UserId = User.Identity.Name,
-				LocationId = location.ID,
-				Date = DateTime.Now
-			};
-			RedirectToAction("Create", "Views", view_data);
+            View view_data = new View()
+            {
+                UserId = User.Identity.Name,
+                LocationId = location.ID,
+                Date = DateTime.Now
+            };
+            await new ViewsController(_context).Create(view_data);
+            // Increase "View" counter
 
             return View(location);
 
