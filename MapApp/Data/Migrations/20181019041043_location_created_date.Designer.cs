@@ -9,9 +9,10 @@ using MapApp.Data;
 namespace MapApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181019041043_location_created_date")]
+    partial class location_created_date
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -124,16 +125,16 @@ namespace MapApp.Data.Migrations
 
             modelBuilder.Entity("MapApp.Models.ViewModels.View", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<int>("LocationId");
+                    b.Property<string>("LocationId");
 
                     b.Property<string>("UserId");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("View");
                 });

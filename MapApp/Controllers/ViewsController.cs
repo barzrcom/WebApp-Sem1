@@ -32,7 +32,7 @@ namespace MapApp.Controllers
             }
 
             var view = await _context.View
-                .SingleOrDefaultAsync(m => m.Id == id);
+                .SingleOrDefaultAsync(m => m.ID == id);
             if (view == null)
             {
                 return NotFound();
@@ -43,8 +43,7 @@ namespace MapApp.Controllers
 
         // POST: Views/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,LocationId,Date")] View view)
+        public async Task<IActionResult> Create([Bind("ID,UserId,LocationId,Date")] View view)
         {
             if (ModelState.IsValid)
             {
@@ -60,7 +59,7 @@ namespace MapApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var view = await _context.View.SingleOrDefaultAsync(m => m.Id == id);
+            var view = await _context.View.SingleOrDefaultAsync(m => m.ID == id);
             _context.View.Remove(view);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -68,7 +67,7 @@ namespace MapApp.Controllers
 
         private bool ViewExists(int id)
         {
-            return _context.View.Any(e => e.Id == id);
+            return _context.View.Any(e => e.ID == id);
         }
-    }
+	}
 }

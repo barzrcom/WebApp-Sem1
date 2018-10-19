@@ -7,7 +7,7 @@
 <h2>Locations</h2>
 
 <p>
-    <a class="btn btn-success" asp-action="Create">Create New</a>
+    <a class="btn btn-primary fa fa-plus" asp-action="Create"></a>
 </p>
 <table class="table">
     <thead>
@@ -37,19 +37,23 @@
         <form asp-controller="Locations" asp-action="Index" method="get">
             <tr>
                 <td>
-                    <input type="text" name="name">
+                    <input type="text" name="name" value="@(Context.Request.Query["name"])">
                 </td>
                 <td>
-                    <input type="text" name="user">
+                    <input type="text" name="user" value="@(Context.Request.Query["user"])">
                 </td>
                 <td>
-                    <input type="text" name="description">
+                    <input type="text" name="description" value="@(Context.Request.Query["description"])">
                 </td>
                 <td>
-                    <input type="text" name="category">
+                    <input type="text" name="category" value="@(Context.Request.Query["category"])">
+                </td>
+                <td />
+                <td />
+                <td>
+                    <button class="btn btn-primary fa fa-search" type="submit"/>
                 </td>
             </tr>
-            <input class="btn btn-primary" type="submit" value="Filter" />
         </form>
     @foreach (var item in Model)
     {
@@ -94,14 +98,12 @@
             <td style='white-space: nowrap'>
                 @if (item.User == this.User.Identity.Name || this.User.IsInRole("Administrator"))
                 {
-                    <a class="btn btn-primary"  asp-action="Edit" asp-route-id="@item.ID">Edit</a>
-                    @Html.Raw(" | ")
+                    <a class="btn btn-primary fa fa-pencil"  asp-action="Edit" asp-route-id="@item.ID"></a>
                 }
-                <a class="btn btn-success"  asp-action="Details" asp-route-id="@item.ID">Details</a>
+                <a class="btn btn-success fa fa-info"  asp-action="Details" asp-route-id="@item.ID"></a>
                 @if (item.User == this.User.Identity.Name || this.User.IsInRole("Administrator"))
                 {
-                    @Html.Raw(" | ")
-                    <a class="btn btn-danger"  asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    <a class="btn btn-danger fa fa-times"  asp-action="Delete" asp-route-id="@item.ID"></a>
                 }
             </td>
         </tr>

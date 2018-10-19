@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using MapApp.Models.CommentsModels;
+using MapApp.Models.ViewModels;
 
 namespace MapApp.Controllers
 {
@@ -46,11 +47,14 @@ namespace MapApp.Controllers
 			return Json(await _context.Location.ToListAsync());
 		}
 
-    // GET: Categories
-    public async Task<IActionResult> Categories()
-    {
-            return Json(Enum.GetNames(typeof(LocationCategory)));
-    }
+        // GET: Categories
+        public async Task<IActionResult> Categories()
+        {
+                var categories = await _context.Location.GroupBy(l => l.Category)
+                    .ToDictionaryAsync(g => Enum.GetName(typeof(LocationCategory), g.Key), g => g.Count());
+
+                return Json(categories);
+        }
 
 		[Authorize]
 		// GET: Locations/Details/5
@@ -87,6 +91,15 @@ namespace MapApp.Controllers
 
             // Updating rating value base on comments average
             UpdateRating(comments, location);
+
+            View view_data = new View()
+            {
+                UserId = User.Identity.Name,
+                LocationId = location.ID,
+                Date = DateTime.Now
+            };
+            await new ViewsController(_context).Create(view_data);
+            // Increase "View" counter
 
             return View(location);
 
@@ -269,11 +282,21 @@ namespace MapApp.Controllers
 				}
 			}
 
-			//location.Image = Convert.ToBase64String(location.Image);
-			location.User = User.Identity.Name;
+			// Update user only if null
+			if (location.User == null)
+			{
+				location.User = User.Identity.Name;
+			}
+
+			// Update CreateDate only if null
+			int result = DateTime.Compare(location.CreatedDate, new DateTime(1, 1, 1, 0, 0, 0));
+			if (result == 0)
+			{
+				location.CreatedDate = DateTime.Now;
+			}
 		}
 
-        public IActionResult DoubleComment()
+		public IActionResult DoubleComment()
         {
             return View();
         }
@@ -306,5 +329,5 @@ namespace MapApp.Controllers
             _context.SaveChanges();
         }
 
-    }
+	}
 }

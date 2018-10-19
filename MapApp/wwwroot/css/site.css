@@ -53,6 +53,7 @@ table td input {
     width: 100%;
 }
 
+
 div.about {
     -webkit-column-count: 3;
     -moz-column-count: 3;
@@ -66,4 +67,9 @@ div.about {
 
 body {
     font-family: sagoeuisl;
+}
+
+table td button {
+    height: 100%;
+    width: 100%;
 }
