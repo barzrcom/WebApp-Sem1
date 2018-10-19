@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using MapApp.Models.CommentsModels;
+using MapApp.Models.ViewModels;
 
 namespace MapApp.Controllers
 {
@@ -90,6 +91,16 @@ namespace MapApp.Controllers
 
             // Updating rating value base on comments average
             UpdateRating(comments, location);
+
+			// Increase "View" counter
+			View view_data = new View()
+			{
+				ID = 1,
+				UserId = User.Identity.Name,
+				LocationId = location.ID,
+				Date = DateTime.Now
+			};
+			RedirectToAction("Create", "Views", view_data);
 
             return View(location);
 
@@ -319,5 +330,5 @@ namespace MapApp.Controllers
             _context.SaveChanges();
         }
 
-    }
+	}
 }
