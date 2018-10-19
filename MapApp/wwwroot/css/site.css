@@ -53,6 +53,22 @@ table td input {
     width: 100%;
 }
 
+
+div.about {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+}
+
+@font-face {
+    font-family: sagoeuisl;
+    src: url(/fonts/segoeui.ttf);
+}
+
+body {
+    font-family: sagoeuisl;
+}
+
 table td button {
     height: 100%;
     width: 100%;
