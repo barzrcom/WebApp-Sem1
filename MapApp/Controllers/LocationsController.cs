@@ -272,11 +272,21 @@ namespace MapApp.Controllers
 				}
 			}
 
-			//location.Image = Convert.ToBase64String(location.Image);
-			location.User = User.Identity.Name;
+			// Update user only if null
+			if (location.User == null)
+			{
+				location.User = User.Identity.Name;
+			}
+
+			// Update CreateDate only if null
+			int result = DateTime.Compare(location.CreatedDate, new DateTime(1, 1, 1, 0, 0, 0));
+			if (result == 0)
+			{
+				location.CreatedDate = DateTime.Now;
+			}
 		}
 
-        public IActionResult DoubleComment()
+		public IActionResult DoubleComment()
         {
             return View();
         }
