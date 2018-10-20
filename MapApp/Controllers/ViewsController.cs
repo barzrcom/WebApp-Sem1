@@ -25,20 +25,35 @@ namespace MapApp.Controllers
         }
 
         // GET: Categories
-        public async Task<IActionResult> ByLocation()
+        public async Task<IActionResult> ByLocation(int? limitResults)
         {
-            var query = await _context.Location.Join(
+
+            var query = _context.Location.Join(
                 _context.View, l => l.ID, v => v.LocationId,
                 (location, view) => new { id = location.ID, name = location.Name })
                 .GroupBy(l => l.id, l => l.name)
-                .ToDictionaryAsync(g => g.Key.ToString(), g =>  g.Count());
-            return Json(query);
+                .Select(n => new { Id = n.Key, View = n.Count() })
+                .OrderByDescending(l => l.View);
+
+            if (null != limitResults)
+            {
+                var results = await query.Take(limitResults.GetValueOrDefault())
+                .ToDictionaryAsync(l => l.Id, l => l.View);
+                return Json(results);
+            }
+            else
+            {
+                var results = await query
+               .ToDictionaryAsync(l => l.Id, l => l.View);
+                return Json(results);
+            } 
         }
 
         public async Task<IActionResult> ByDate()
         {
             var query = await _context.View.GroupBy(l => new DateTime(l.Date.Year, l.Date.Month, l.Date.Day))
-                  .ToDictionaryAsync(g => g.Key, g => g.Count());
+                .OrderBy(g => g.Key)
+                .ToDictionaryAsync(g => g.Key, g => g.Count());
 
             return Json(query);
         }

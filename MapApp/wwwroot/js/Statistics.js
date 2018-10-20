@@ -1,4 +1,11 @@
-﻿$(document).ready(function () {
+﻿var dynamicColors = function () {
+    var r = Math.floor(Math.random() * 255);
+    var g = Math.floor(Math.random() * 255);
+    var b = Math.floor(Math.random() * 255);
+    return "rgb(" + r + "," + g + "," + b + ")";
+}
+
+$(document).ready(function () {
 
     //options
     var options1 = {
@@ -17,6 +24,12 @@
                 fontColor: "#333",
                 fontSize: 16
             }
+        },
+        events: ["mousemove", "mouseout", "click", "touchstart", "touchmove", "touchend"],
+        onClick: function (e, data) {
+            if (data[0] != undefined) {
+                window.location.href = "../Locations?category=" + data[0]._model.label;
+            }
         }
     };
 
@@ -32,16 +45,17 @@
         title: {
             display: true,
             position: "top",
-            text: "Top Views",
+            text: "Most Viewed (5)",
             fontSize: 18,
             fontColor: "#111"
         },
         legend: {
-            display: true,
-            position: "bottom",
-            labels: {
-                fontColor: "#333",
-                fontSize: 16
+            display: false,
+        },
+        events: ["mousemove", "mouseout", "click", "touchstart", "touchmove", "touchend"],
+        onClick: function (e, data) {
+            if (data[0] != undefined) {
+                window.location.href = "../Locations/Details/" + data[0]._model.label;
             }
         }
     };
@@ -53,16 +67,17 @@
                     beginAtZero: true
                 }
             }],
-			xAxes: [{
-				type: 'time',
-				distribution: 'series',
-				time: {
-					unit: 'day',
-					unitStepSize: 1,
-					displayFormats: {
-						'day': 'MMM DD'
-					}
-				}
+            xAxes: [{
+                type: 'time',
+                distribution: 'series',
+                time: {
+                    unit: 'day',
+                    unitStepSize: 1,
+                    tooltipFormat: 'MMM DD',
+                    displayFormats: {
+                        'day': 'MMM DD'
+                    }
+                }
             }]
         },
         responsive: true,
@@ -74,45 +89,29 @@
             fontColor: "#111"
         },
         legend: {
-            display: true,
-            position: "bottom",
-            labels: {
-                fontColor: "#333",
-                fontSize: 16
-            }
-        }
+            display: false,
+        },
     };
 
     // get Categories dynamicly
     $.get("/Locations/Categories", function (data) {
         location_category = data;
- 
+
         chartdata1 = {
             datasets: [{
                 data: [],
-                backgroundColor: [
-                    "#F7464A",
-                    "#46BFBD",
-                    "#FDB45C",
-                    "#F5DEB3",
-                    "#9ACD32"
-                ],
-                borderColor: [
-                    "#FFFFFF",
-                    "#FFFFFF",
-                    "#FFFFFF",
-                    "#FFFFFF",
-                    "#FFFFFF"
-                ],
-                borderWidth: [1, 1, 1, 1, 1]
+                backgroundColor: [],
+                borderColor: "#FFFFFF",
+                borderWidth: 1
             }],
             // These labels appear in the legend and in the tooltips when hovering different arcs
             labels: []
         };
- 
+
 
         $.each(location_category, function (key, value) {
             chartdata1.datasets[0].data.push(value);
+            chartdata1.datasets[0].backgroundColor.push(dynamicColors());
             chartdata1.labels.push(key);
         });
 
@@ -130,27 +129,15 @@
     });
 
     // get Categories dynamicly
-    $.get("/Views/ByLocation", function (data) {
+    $.get("/Views/ByLocation?limitResults=5", function (data) {
         location_category = data;
 
         chartdata2 = {
             datasets: [{
                 data: [],
-                backgroundColor: [
-                    "#F7464A",
-                    "#46BFBD",
-                    "#FDB45C",
-                    "#F5DEB3",
-                    "#9ACD32"
-                ],
-                borderColor: [
-                    "#FFFFFF",
-                    "#FFFFFF",
-                    "#FFFFFF",
-                    "#FFFFFF",
-                    "#FFFFFF"
-                ],
-                borderWidth: [1, 1, 1, 1, 1]
+                backgroundColor: [],
+                borderColor: "#FFFFFF",
+                borderWidth: 1
             }],
             // These labels appear in the legend and in the tooltips when hovering different arcs
             labels: []
@@ -159,6 +146,7 @@
 
         $.each(location_category, function (key, value) {
             chartdata2.datasets[0].data.push(value);
+            chartdata2.datasets[0].backgroundColor.push(dynamicColors());
             chartdata2.labels.push(key);
         });
 
@@ -183,21 +171,7 @@
         chartdata3 = {
             datasets: [{
                 data: [],
-                backgroundColor: [
-                    "#F7464A",
-                    "#46BFBD",
-                    "#FDB45C",
-                    "#F5DEB3",
-                    "#9ACD32"
-                ],
-                borderColor: [
-                    "#FFFFFF",
-                    "#FFFFFF",
-                    "#FFFFFF",
-                    "#FFFFFF",
-                    "#FFFFFF"
-                ],
-                borderWidth: [1, 1, 1, 1, 1]
+                pointBackgroundColor: "#6597ed"
             }],
             // These labels appear in the legend and in the tooltips when hovering different arcs
             labels: []
@@ -224,4 +198,3 @@
 
 
 })
-
