@@ -7,11 +7,11 @@ namespace MapApp.Models.ViewModels
 {
 	public class View
 	{
-		public int Id { get; set; }
+		public int ID { get; set; }
 
 		public string UserId { get; set; }
 
-		public string LocationId { get; set; }
+		public int LocationId { get; set; }
 
 		public DateTime Date { get; set; }
 	}

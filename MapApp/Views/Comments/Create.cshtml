@@ -41,14 +41,14 @@
             <div class="col-md-offset-2 col-md-10">
                 <input asp-for="User" value="@ViewBag.User" type="hidden" />
                 <input asp-for="Location" value="@ViewBag.loc_id" type="hidden" />
-                <input type="submit" value="Create" class="btn btn-default" />
+                <button type="submit"  class="btn btn-primary fa fa-floppy-o" ></button>
             </div>
         </div>
     </div>
 </form>
 
 <div>
-    <a asp-controller="Locations" asp-action="Details" asp-route-id="@ViewBag.loc_id">Back to List</a>
+    <a class="btn btn-default" asp-controller="Locations" asp-action="Details" asp-route-id="@ViewBag.loc_id">Back to List</a>
 </div>
 
 @section Scripts {

@@ -13,74 +13,80 @@
 <div class="row">
     <h4>Location</h4>
     <hr />
-    <dl class="dl-horizontal col-lg-4 pull-left">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Rating)
-        </dt>
-        <dd>
-            <select id="barrating" hidden>
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Latitude)
-        </dt>
-        <dd id="Latitude">
-            @Html.DisplayFor(model => model.Latitude)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Longitude)
-        </dt>
-        <dd id="Longitude">
-            @Html.DisplayFor(model => model.Longitude)
-        </dd>
-        <dt>
-            Weather
-        </dt>
-        <dd id="weather">
-            <div class="loader"></div>
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
-        <dd>
-            @{
-                var totalMessage = "";
-                if (Model.Image != null) { totalMessage += "data:image;base64, " + System.Convert.ToBase64String(Model.Image); }
-                else { totalMessage += "/images/null_image.png"; };
-            }
-            <img src="@totalMessage" width="100" height="100" />
-        </dd>
-    </dl>
+	<dl class="dl-horizontal col-lg-4 pull-left">
+		<dt>
+			@Html.DisplayNameFor(model => model.Name)
+		</dt>
+		<dd>
+			@Html.DisplayFor(model => model.Name)
+		</dd>
+		<dt>
+			@Html.DisplayNameFor(model => model.Description)
+		</dt>
+		<dd>
+			@Html.DisplayFor(model => model.Description)
+		</dd>
+		<dt>
+			@Html.DisplayNameFor(model => model.Category)
+		</dt>
+		<dd>
+			@Html.DisplayFor(model => model.Category)
+		</dd>
+		<dt>
+			@Html.DisplayNameFor(model => model.Rating)
+		</dt>
+		<dd>
+			<select id="barrating" hidden>
+				<option value="0">0</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+		</dd>
+		<dt>
+			@Html.DisplayNameFor(model => model.Latitude)
+		</dt>
+		<dd id="Latitude">
+			@Html.DisplayFor(model => model.Latitude)
+		</dd>
+		<dt>
+			@Html.DisplayNameFor(model => model.Longitude)
+		</dt>
+		<dd id="Longitude">
+			@Html.DisplayFor(model => model.Longitude)
+		</dd>
+		<dt>
+			@Html.DisplayNameFor(model => model.CreatedDate)
+		</dt>
+		<dd id="Created Date">
+			@Html.DisplayFor(model => model.CreatedDate)
+		</dd>
+		<dt>
+			Weather
+		</dt>
+		<dd id="weather">
+			<div class="loader"></div>
+		</dd>
+		<dt>
+			@Html.DisplayNameFor(model => model.Image)
+		</dt>
+		<dd>
+			@{
+				var totalMessage = "";
+				if (Model.Image != null) { totalMessage += "data:image;base64, " + System.Convert.ToBase64String(Model.Image); }
+				else { totalMessage += "/images/null_image.png"; };
+			}
+			<img src="@totalMessage" width="100" height="100" />
+		</dd>
+	</dl>
     <div class="col-lg-8 pull-right" id="map"></div>
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary fa fa-pencil" asp-action="Edit" asp-route-id="@Model.ID"></a>
+    <a class="btn btn-default" asp-action="Index">Back to List</a>
 </div>
 
 <br />
@@ -112,6 +118,26 @@
         </tr>
     </thead>
     <tbody>
+        <form asp-controller="Locations" asp-action="Details" asp-route-id="@Model.ID" method="get">
+            <tr>
+                <td />
+                <td>
+                    <input type="text" name="header" value="@(Context.Request.Query["header"])">
+                </td>
+                <td>
+                    <input type="text" name="content" value="@(Context.Request.Query["content"])">
+                </td>
+                <td />
+                <td />
+                <td>
+                    <input type="text" name="user" value="@(Context.Request.Query["user"])">
+                </td>
+                <td>
+                    <button class="btn btn-primary fa fa-search" type="submit" />
+                </td>
+            </tr>
+            
+        </form>
         @foreach (var item in ViewBag.Comments)
         {
             <tr>
@@ -139,10 +165,16 @@
                 <td>
                     @item.User
                 </td>
-                <td>
-                    @if (item.User == ViewBag.User || ViewBag.Admin) {<a asp-controller="Comments" asp-action="Edit" asp-route-id="@item.ID">Edit</a> @Html.Raw(" | ")  }
-                    <a asp-controller="Comments" asp-action="Details" asp-route-id="@item.ID">Details</a>
-                    @if (item.User == ViewBag.User || ViewBag.Admin) {@Html.Raw(" | ")<a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.ID">Delete</a>  }
+                <td style='white-space: nowrap'>
+                    @if (item.User == ViewBag.User || ViewBag.Admin)
+                    {
+                        <a class="btn btn-primary fa fa-pencil" asp-controller="Comments" asp-action="Edit" asp-route-id="@item.ID"></a>
+                    }
+                    <a class="btn btn-success fa fa-info" asp-controller="Comments" asp-action="Details" asp-route-id="@item.ID"></a>
+                    @if (item.User == ViewBag.User || ViewBag.Admin)
+                    {
+                        <a class="btn btn-danger fa fa-times" asp-controller="Comments" asp-action="Delete" asp-route-id="@item.ID"></a>
+                    }
                 </td>
             </tr>
         }
@@ -150,8 +182,14 @@
 </table>
 
 <p>
-    @if (ViewBag.Doubled){ <span data-toggle="tooltip" title="You are allowed only one comment per location" style="cursor: default; color:gray;">New comment</span> }
-    else{ <a asp-controller="Comments" asp-action="Create" asp-route-loc_id="@Model.ID">New comment</a> }
+    @if (ViewBag.Doubled)
+    {
+        <a class="btn btn-default fa fa-plus" data-toggle="tooltip" title="You are allowed only one comment per location" disabled></a>
+    }
+    else
+    {
+        <a class="btn btn-success fa fa-plus" asp-controller="Comments" asp-action="Create" asp-route-loc_id="@Model.ID"></a>
+    }
 </p>
 
 

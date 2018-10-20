@@ -2,7 +2,6 @@
     padding-top: 50px;
     padding-bottom: 20px;
 }
-
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
@@ -47,4 +46,30 @@ textarea {
     .carousel-caption {
         display: none;
     }
+}
+
+table td input {
+    height: 100%;
+    width: 100%;
+}
+
+
+div.about {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+}
+
+@font-face {
+    font-family: sagoeuisl;
+    src: url(/fonts/segoeui.ttf);
+}
+
+body {
+    font-family: sagoeuisl;
+}
+
+table td button {
+    height: 100%;
+    width: 100%;
 }

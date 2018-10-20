@@ -12,9 +12,18 @@ $(document).ready(function () {
         clearLocations();
     });
 
-	$('#map').css({
-		'height': '400px', /* The height is 400 pixels */
-		'width': '100%' /* The width is the width of the web page */
+	$('.class--map').css({
+		'position': 'absolute',
+		'top': '50px',
+		'left': '0',
+		'bottom': '0px',
+		'right': '0'
+	});
+
+	$('.container--map').css({
+		'padding': '5px',
+		'margin': '5px'
 	});
 })
+
 
