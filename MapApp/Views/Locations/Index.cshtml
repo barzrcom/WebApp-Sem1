@@ -27,9 +27,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Rating)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -79,21 +76,6 @@
                     <option value="4">4</option>
                     <option value="5">5</option>
                 </select>
-            </td>
-            <td>
-                @{
-                    var totalMessage = "";
-                    if (item.Image != null)
-                    {
-                        totalMessage += "data:image;base64, " + System.Convert.ToBase64String(item.Image);
-                    }
-                    else
-                    {
-                        totalMessage += "/images/null_image.png";
-                    }
-                    ;
-                }
-                <img src="@totalMessage" width="100" height="100"/>
             </td>
             <td style='white-space: nowrap'>
                 @if (item.User == this.User.Identity.Name || this.User.IsInRole("Administrator"))
