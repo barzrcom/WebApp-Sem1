@@ -145,7 +145,14 @@ namespace MapApp.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				this.UpdateCustomFields(location, Image);
+				this.UpdateImage(location, Image);
+
+				// Update user
+				location.User = User.Identity.Name;
+
+				// Update CreateDate
+				location.CreatedDate = DateTime.Now;
+
 				_context.Add(location);
 				await _context.SaveChangesAsync();
                 if (Image != null && Image.Length > 0)
@@ -189,6 +196,9 @@ namespace MapApp.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,Category,Latitude,Longitude,Rating")] Location location, IFormFile Image)
 		{
+			// Don't update CreatedDate and User on Edit
+			var excluded = new[] { "CreatedDate", "User" };
+
 			if (id != location.ID)
 			{
 				return NotFound();
@@ -198,8 +208,17 @@ namespace MapApp.Controllers
 			{
 				try
 				{
-					this.UpdateCustomFields(location, Image);
-					_context.Update(location);
+					this.UpdateImage(location, Image);
+					var entry = _context.Entry(location);
+					entry.State = EntityState.Modified;
+					foreach (var name in excluded)
+					{
+						entry.Property(name).IsModified = false;
+					}
+
+					// Don't update Image if not provided from the user
+					if (Image == null) entry.Property(m => m.Image).IsModified = false;
+
 					await _context.SaveChangesAsync();
 				}
 				catch (DbUpdateConcurrencyException)
@@ -265,12 +284,22 @@ namespace MapApp.Controllers
 			return RedirectToAction("Index");
 		}
 
+		[Authorize]
+		public async Task<IActionResult> DeleteImage(int id)
+		{
+			var location = await _context.Location.SingleOrDefaultAsync(m => m.ID == id);
+			location.Image = null;
+
+			await _context.SaveChangesAsync();
+			return RedirectToAction("Index");
+		}
+
 		private bool LocationExists(int id)
 		{
 			return _context.Location.Any(e => e.ID == id);
 		}
 
-		private async void UpdateCustomFields(Location location, IFormFile Image)
+		private async void UpdateImage(Location location, IFormFile Image)
 		{
 			// TODO: Convert Image file to byte here.
 			if (Image != null && Image.Length > 0)
@@ -280,19 +309,6 @@ namespace MapApp.Controllers
 					await Image.CopyToAsync(stream);
 					location.Image = stream.ToArray();
 				}
-			}
-
-			// Update user only if null
-			if (location.User == null)
-			{
-				location.User = User.Identity.Name;
-			}
-
-			// Update CreateDate only if null
-			int result = DateTime.Compare(location.CreatedDate, new DateTime(1, 1, 1, 0, 0, 0));
-			if (result == 0)
-			{
-				location.CreatedDate = DateTime.Now;
 			}
 		}
 
