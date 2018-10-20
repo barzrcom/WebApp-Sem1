@@ -1,27 +1,19 @@
 ﻿
-using System;
-using System.Data;
-using System.Data.SqlClient;
+
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MapApp.Models.LocationModels;
 using MapApp.Data;
-using Microsoft.AspNetCore.Authorization;
-using System.IO;
-using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
-using System.Net.Http;
-using Microsoft.Extensions.Configuration;
-using MapApp.Models.CommentsModels;
+
 using Accord.MachineLearning.Bayes;
 using Accord.Statistics.Distributions.Univariate;
 using Accord.MachineLearning.VectorMachines.Learning;
-using Accord.Statistics.Analysis;
-using Accord.Math.Distances;
 using Accord.Statistics.Kernels;
 using Accord.MachineLearning;
+using Accord.Statistics.Distributions.Fitting;
 
 namespace MapApp.Controllers
 {
@@ -38,43 +30,76 @@ namespace MapApp.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ML(int? id)
+
+        public async Task<IActionResult> Recommend()
         {
-
-            List<double[]> inputs = new List<double[]>();
-            inputs.Add(new double[] { 0, 5 });
-            inputs.Add(new double[] { 0, 4 });
-            inputs.Add(new double[] { 1, 1 });
-            inputs.Add(new double[] { 2, 1 });
-
-
-            //inputs.Append<double[]>(new double[] { 52, 0 }); //not working
-
             var comments = await _context.Comment.ToListAsync();
             var locations = await _context.Location.ToListAsync();
 
-
-            var result =
+            //Get all locations for training set (locations with a comment of current user)
+            var resultTrain =
                 from c in comments
                 join l in locations on c.Location equals l.ID
                 where c.User.Equals(User.Identity.Name)
-                select new { lc=l.Category, l_rating = l.Rating, c_rating = c.Rating };
-            List<double[]> inputs_2 = new List<double[]>();
-            result.ToList().ForEach(r => inputs_2.Add(new double[] { r.l_rating, r.c_rating}));
-            //result.ToList().ForEach(r => inputs.Append<double[]>(new double[] { r.Category.GetHashCode(), r.C_Rating }));
+                select new { l.Category, l_rating = l.Rating, c_rating = c.Rating };
 
-            List<double[]> test = new List<double[]>();
-            test.Add(new double[] { 0, 1 });
-            test.Add(new double[] { 0, 2 });
-            test.Add(new double[] { 0, 3 });
-            test.Add(new double[] { 0, 4 });
-            test.Add(new double[] { 1, 5 });
-            test.Add(new double[] { 1, 2 });
+            //Create a list of {Category, Location Rating} for ML input
+            List<double[]> trainSetInput = new List<double[]>();
+            resultTrain.ToList().ForEach(r => trainSetInput.Add(new double[] { r.Category.GetHashCode(), r.l_rating }));
 
+            //Create a list of Comment rating for ML output - if user's location rate > 3 then positive for this instance
+            List<int> trainSetOutput = new List<int>();
+            resultTrain.ToList().ForEach(r => trainSetOutput.Add((r.c_rating > 3) ? 1 : 0));
 
+            //Get all locations for test set (locations that published by another user)
+            var resultTest =
+                from l in locations
+                where !l.User.Equals(User.Identity.Name)
+                select new { l.Category, l.Rating, l.ID };
 
-            int[] outputs = { 1, 1, 0, 0 };
+            //Create a list of {Category, Location Rating} for test set
+            List<double[]> testSet = new List<double[]>();
+            resultTest.ToList().ForEach(r => testSet.Add(new double[] { r.Category.GetHashCode(), r.Rating }));
 
+            //Create a list of all potential recommend locations IDs
+            List<int> locationsID = new List<int>();
+            resultTest.ToList().ForEach(r => locationsID.Add(r.ID));
+
+            bool[] answers = ML_SVM(trainSetInput, trainSetOutput, testSet);
+
+            //Build a recommends location based on SVM result
+            List<Location> locationRecommends = new List<Location>();
+            for (var i = 0; i < answers.Count(); i++)
+            {
+                if (answers[i])
+                    locationRecommends.Add(locations.Where(s => s.ID == locationsID[i]).SingleOrDefault());
+            }
+
+            return View(locations);
+        }
+
+        // ML Using Naive Bayes
+        // In our problem, we have 2 classes (samples can be either positive or negative), and 2 inputs (x and y coordinates).
+        private int[] ML_NaiveBayes(List<double[]> trainSetInput, List<int> trainSetOutput, List<double[]> testSet)
+        {
+            // Create a Naive Bayes learning algorithm
+            var teacher = new NaiveBayesLearning<NormalDistribution>();
+
+            teacher.Options.InnerOption = new NormalOptions()
+            {
+                Regularization = 1e-12
+            };
+
+            // Use the learning algorithm to learn
+            var nb = teacher.Learn(trainSetInput.ToArray(), trainSetOutput.ToArray());
+
+            // Classify the samples using the model
+            return nb.Decide(testSet.ToArray());
+        }
+
+        // ML Using SVM
+        private bool[] ML_SVM(List<double[]> trainSetInput, List<int> trainSetOutput, List<double[]> testSet)
+        {
             // Create a new Sequential Minimal Optimization (SMO) learning 
             // algorithm and estimate the complexity parameter C from data
             var teacher = new SequentialMinimalOptimization<Gaussian>()
@@ -84,14 +109,12 @@ namespace MapApp.Controllers
             };
 
             // Teach the vector machine
-            var svm = teacher.Learn(inputs.ToArray(), outputs);
+            var svm = teacher.Learn(trainSetInput.ToArray(), trainSetOutput.ToArray()); 
 
             // Classify the samples using the model
-            bool[] answers = svm.Decide(test.ToArray());
-
-            return null;
-
+            return svm.Decide(testSet.ToArray());
         }
+
 
         public IActionResult About()
         {

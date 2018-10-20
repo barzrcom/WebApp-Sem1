@@ -1,0 +1,66 @@
+﻿@model IEnumerable<MapApp.Models.LocationModels.Location>
+
+@{
+    ViewData["Title"] = "Recommended locations";
+}
+
+<style>
+    .container img {
+        width: 70%;
+        height: auto;
+    }
+    .thumbnail {
+        text-align:center;
+    }
+</style>
+
+<h2>Recommended locations</h2>
+
+<div class="container" style="margin-top:10px">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-xs-6 col-md-3">
+                <div class="thumbnail">
+                    <h3>@Html.DisplayFor(modelItem => item.Name)</h3>
+                    <select id="barrating-@item.ID" hidden>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    @{
+                        var totalMessage = "";
+                        if (item.Image != null) { totalMessage += "data:image;base64, " + System.Convert.ToBase64String(item.Image); }
+                        else { totalMessage += "/images/null_image.png"; };
+                    }
+                    <img src="@totalMessage" alt="@Html.DisplayFor(modelItem => item.Name)" />
+                    <div class="caption">
+                        <h4>@Html.DisplayFor(modelItem => item.Category)</h4>
+                        <p><a asp-controller="Locations" asp-action="Details" asp-route-id="@item.ID" class="btn btn-primary" role="button">More details</a></p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Scripts {
+    @foreach (var item in Model)
+    {
+        <script type="text/javascript">
+        $(function () {
+            $('#barrating-@item.ID').barrating({
+                theme: 'fontawesome-stars-o',
+                readonly: true,
+                initialRating: @item.Rating,
+                allowEmpty: true,
+                emptyValue: 0
+            });
+        });
+        </script>
+    }
+}
