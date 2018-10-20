@@ -53,9 +53,16 @@
                     beginAtZero: true
                 }
             }],
-            xAxes: [{
-                type: 'time',
-                distribution: 'series'
+			xAxes: [{
+				type: 'time',
+				distribution: 'series',
+				time: {
+					unit: 'day',
+					unitStepSize: 1,
+					displayFormats: {
+						'day': 'MMM DD'
+					}
+				}
             }]
         },
         responsive: true,

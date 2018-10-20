@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 public enum LocationCategory : byte
-{ ViewPoint, Restaurant, Museum }
+{ ViewPoint, Restaurant, Museum, Hotel, LandMark, Beach, Attraction, Park, Resort, Shop, Mall }
 
 
 namespace MapApp.Models.LocationModels
