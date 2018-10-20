@@ -380,14 +380,20 @@ namespace MapApp.Controllers
             List<int> locationsID = new List<int>();
             resultTest.ToList().ForEach(r => locationsID.Add(r.ID));
 
-            bool[] answers = ML_SVM(trainSetInput, trainSetOutput, testSet);
-
-            //Build a recommends location based on SVM result
             List<Location> locationRecommends = new List<Location>();
-            for (var i = 0; i < answers.Count(); i++)
+
+            int TrainSetMinimumSize = _configuration.GetValue<int>("MachineLearning:TrainSetMinimumSize");
+            ViewData["TrainSetMinimumSize"] = TrainSetMinimumSize;
+            if (trainSetOutput.Count() > TrainSetMinimumSize)
             {
-                if (answers[i])
-                    locationRecommends.Add(locations.Where(s => s.ID == locationsID[i]).SingleOrDefault());
+                bool[] answers = ML_SVM(trainSetInput, trainSetOutput, testSet);
+
+                //Build a recommends location based on SVM result
+                for (var i = 0; i < answers.Count(); i++)
+                {
+                    if (answers[i])
+                        locationRecommends.Add(locations.Where(s => s.ID == locationsID[i]).SingleOrDefault());
+                }
             }
 
             return View(locationRecommends);
