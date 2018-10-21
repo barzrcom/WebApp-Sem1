@@ -27,24 +27,28 @@ namespace MapApp.Controllers
         // GET: Categories
         public async Task<IActionResult> ByLocation(int? limitResults)
         {
+            //var query = from l in _context.Location
+            //            join v in _context.View on l.ID equals v.LocationId into j1
+            //            orderby j1.Count() descending
+            //            select new { Id = l.ID, Count = j1.Count(), Name = l.Name };
 
             var query = _context.Location.Join(
                 _context.View, l => l.ID, v => v.LocationId,
                 (location, view) => new { id = location.ID, name = location.Name })
                 .GroupBy(l => l.id, l => l.name)
-                .Select(n => new { Id = n.Key, View = n.Count() })
-                .OrderByDescending(l => l.View);
+                .Select(n => new { Id = n.Key, Count = n.Count(), Name=n })
+                .OrderByDescending(l => l.Count);
 
             if (null != limitResults)
-            {
+            { 
                 var results = await query.Take(limitResults.GetValueOrDefault())
-                .ToDictionaryAsync(l => l.Id, l => l.View);
+                .ToDictionaryAsync(l => l.Id, l => new { l.Count, Name=l.Name.First() });
                 return Json(results);
             }
             else
             {
                 var results = await query
-               .ToDictionaryAsync(l => l.Id, l => l.View);
+               .ToDictionaryAsync(l => l.Id, l => new { l.Count, Name = l.Name.First() });
                 return Json(results);
             } 
         }
