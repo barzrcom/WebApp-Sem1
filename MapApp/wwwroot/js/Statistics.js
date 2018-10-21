@@ -54,8 +54,9 @@ $(document).ready(function () {
         },
         events: ["mousemove", "mouseout", "click", "touchstart", "touchmove", "touchend"],
         onClick: function (e, data) {
+            console.log(data);
             if (data[0] != undefined) {
-                window.location.href = "../Locations/Details/" + data[0]._model.label;
+                window.location.href = "../Locations/Details/" + data[0]._model.label.split('-')[0];
             }
         }
     };
@@ -135,19 +136,21 @@ $(document).ready(function () {
         chartdata2 = {
             datasets: [{
                 data: [],
+                height: [],
                 backgroundColor: [],
                 borderColor: "#FFFFFF",
                 borderWidth: 1
             }],
             // These labels appear in the legend and in the tooltips when hovering different arcs
-            labels: []
+            labels: [],
+            
         };
 
 
         $.each(location_category, function (key, value) {
-            chartdata2.datasets[0].data.push(value);
+            chartdata2.datasets[0].data.push(value.count);
             chartdata2.datasets[0].backgroundColor.push(dynamicColors());
-            chartdata2.labels.push(key);
+            chartdata2.labels.push(key+'-'+value.name);
         });
 
 
