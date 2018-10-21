@@ -8,6 +8,7 @@
 .comments-view {
     text-align: left;
     width: 100%;
+    cursor: pointer;
 }
 
 .comments-view td
@@ -26,6 +27,7 @@
     border: 1px solid #8a8c93;
     border-radius: 5px;
     padding: 2px;
+    cursor: pointer;
 }
 
 .filter-input {
