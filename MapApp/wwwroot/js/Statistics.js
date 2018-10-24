@@ -174,7 +174,14 @@ $(document).ready(function () {
         chartdata3 = {
             datasets: [{
                 data: [],
-                pointBackgroundColor: "#6597ed"
+                pointBackgroundColor: "#6597ed",
+                backgroundColor: [
+                    'rgba(0, 137, 132, .2)',
+                ],
+                borderColor: [
+                    'rgba(0, 10, 130, .7)',
+                ],
+                borderWidth: 2
             }],
             // These labels appear in the legend and in the tooltips when hovering different arcs
             labels: []
