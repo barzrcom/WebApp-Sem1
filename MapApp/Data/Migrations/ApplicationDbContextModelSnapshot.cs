@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using MapApp.Data;
 
-
 namespace MapApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
