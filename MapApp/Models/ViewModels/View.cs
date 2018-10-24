@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,7 +12,8 @@ namespace MapApp.Models.ViewModels
 
 		public string UserId { get; set; }
 
-		public int LocationId { get; set; }
+        [ForeignKey("Location")]
+        public int LocationId { get; set; }
 
 		public DateTime Date { get; set; }
 	}
