@@ -15,6 +15,7 @@ using MapApp.Models.CommentsModels;
 using MapApp.Models.ViewModels;
 using Accord.MachineLearning.VectorMachines.Learning;
 using Accord.Statistics.Kernels;
+using PagedList.Core;
 
 namespace MapApp.Controllers
 {
@@ -30,18 +31,21 @@ namespace MapApp.Controllers
         }
 
 		// GET: Locations
-		public async Task<IActionResult> Index(string name, string user, string description, string category)
+		public async Task<IActionResult> Index(string name, string user, string description, string category, int page=1)
 		{
-		    var locations = await _context.Location.ToListAsync();
+            var locations = await _context.Location.ToListAsync();
 
-		    if (!String.IsNullOrEmpty(name)) locations = locations.Where(s => s.Name.Contains(name)).ToList();
+            if (!String.IsNullOrEmpty(name)) locations = locations.Where(s => s.Name.Contains(name)).ToList();
 		    if (!String.IsNullOrEmpty(user)) locations = locations.Where(s => s.User.Contains(user)).ToList();
 		    if (!String.IsNullOrEmpty(description)) locations = locations.Where(s => s.Description.Contains(description)).ToList();
 		    LocationCategory lc;
             if (!String.IsNullOrEmpty(category) && Enum.TryParse(category, true, out lc)) locations = locations.Where(s => s.Category.Equals(lc)).ToList();
 
-            return View(locations);
-		}
+            int pageSize = _configuration.GetValue<int>("Paging:Locations");
+            PagedList<Location> model = new PagedList<Location>(locations.ToList().AsQueryable(), page , pageSize);
+
+            return View("Index", model);
+        }
 
         // GET: Locations
         public async Task<IActionResult> Data()

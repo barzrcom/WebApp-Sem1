@@ -11,6 +11,7 @@ using MapApp.Data;
 using MapApp.Models;
 using MapApp.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace MapApp
 {
@@ -47,6 +48,8 @@ namespace MapApp
                 .AddDefaultTokenProviders();
 
             services.AddSingleton<IConfiguration>(Configuration);
+
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             services.AddMvc();
 
