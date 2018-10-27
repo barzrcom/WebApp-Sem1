@@ -125,7 +125,7 @@ namespace MapApp.Controllers
             string uri = _configuration.GetValue<string>("Facebook:uri");
             string page = _configuration.GetValue<string>("Facebook:page");
             string accessToken = _configuration.GetValue<string>("Facebook:accessToken");
-            string message = location.Name + " " + location.Description;
+            string message = "New " + location.Category + ":" + location.Name + ".\nfor more details visit MapApp";
 
             using (var client = new HttpClient())
             {
