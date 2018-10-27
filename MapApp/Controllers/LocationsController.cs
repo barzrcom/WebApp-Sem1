@@ -366,10 +366,10 @@ namespace MapApp.Controllers
             List<int> trainSetOutput = new List<int>();
             resultTrain.ToList().ForEach(r => trainSetOutput.Add((r.c_rating > 3) ? 1 : 0));
 
-            //Get all locations for test set (locations that published by another user)
+            //Get all locations for test set (locations that published by another user and have some comments)
             var resultTest =
                 from l in locations
-                where !l.User.Equals(User.Identity.Name)
+                where !l.User.Equals(User.Identity.Name) && !l.Rating.Equals(0)
                 select new { l.Category, l.Rating, l.ID };
 
             //Create a list of {Category, Location Rating} for test set
@@ -384,15 +384,22 @@ namespace MapApp.Controllers
 
             int TrainSetMinimumSize = _configuration.GetValue<int>("MachineLearning:TrainSetMinimumSize");
             ViewData["TrainSetMinimumSize"] = TrainSetMinimumSize;
-            if (trainSetOutput.Count() > TrainSetMinimumSize)
+            ViewData["TrainSetCountValidation"] = false;
+
+            //require a valid training set
+            if (trainSetOutput.Count() >= TrainSetMinimumSize)
             {
+                ViewData["TrainSetCountValidation"] = true;
                 bool[] answers = ML_SVM(trainSetInput, trainSetOutput, testSet);
 
                 //Build a recommends location based on SVM result
                 for (var i = 0; i < answers.Count(); i++)
                 {
-                    if (answers[i])
+                    //check if the classification is ture && filter all the locations the user already visited (leave a comment)
+                    if (answers[i] && (comments.Where(c => c.Location == locationsID[i] && c.User.Equals(User.Identity.Name)).Count() == 0))
+                    {
                         locationRecommends.Add(locations.Where(s => s.ID == locationsID[i]).SingleOrDefault());
+                    }
                 }
             }
 
