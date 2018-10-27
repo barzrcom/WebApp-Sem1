@@ -16,6 +16,8 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/lib/jquery-bar-rating-master/dist/themes/fontawesome-stars-o.css">
     @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body>
@@ -32,7 +34,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="transition"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             Locations
@@ -40,17 +42,18 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a asp-area="" asp-controller="Locations" asp-action="Index">All</a></li>
-                            <li><a asp-area="" asp-controller="Locations" asp-action="MyLocationsIndex">My Locations</a></li>
+                            <li><a asp-area="" asp-controller="Locations" asp-action="Index" asp-route-user="@User.Identity.Name">My Locations</a></li>
+                            <li><a asp-area="" asp-controller="Locations" asp-action="Recommend">Recommended Locations</a></li>
                         </ul>
                     </li>
 
+                    <li><a asp-area="" asp-controller="Home" asp-action="Statistics">Statistics</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     @if (this.User.IsInRole("Administrator"))
                     {
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                Admin
+                                <b>Admin</b>
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
@@ -94,6 +97,8 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+
+    <script src="~/lib/jquery-bar-rating-master/dist/jquery.barrating.min.js"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

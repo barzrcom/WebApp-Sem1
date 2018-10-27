@@ -14,6 +14,7 @@
 			<div class="col-sm-6">
 				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 				<input type="hidden" asp-for="ID" />
+				<input type="hidden" asp-for="Rating" value="@Model.Rating" />
 				<div class="form-group">
 					<label asp-for="Name" class="col-md-2 control-label"></label>
 					<div class="col-md-10">
@@ -44,7 +45,7 @@
 				<div class="form-group">
 					<label asp-for="Longitude" class="col-md-2 control-label"></label>
 					<div class="col-md-10">
-						<input asp-for="Longitude" class="form-control" readonly/>
+						<input asp-for="Longitude" class="form-control" readonly />
 						<span asp-validation-for="Longitude" class="text-danger"></span>
 					</div>
 				</div>
@@ -52,11 +53,14 @@
 					<label asp-for="Image" class="col-md-2 control-label"></label>
 					<div class="col-md-10">
 						<input asp-for="Image" class="form-control" type="file" name="Image" />
+						<br />
+						<button class="btn btn-danger" type="button" value="Delete Image" 
+								onclick="location.href='@Url.Action("DeleteImage", "Locations", new { id = @Model.ID })'">Remove Image</button>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-md-offset-2 col-md-10">
-						<input type="submit" value="Save" class="btn btn-default" />
+						<button type="submit" class="btn btn-primary fa fa-floppy-o" />
 					</div>
 				</div>
 			</div>
@@ -64,11 +68,10 @@
 				<div id="map"></div>
 			</div>
 		</div>
-	</div>
 </form>
 
 <div>
-	<a asp-action="Index">Back to List</a>
+	<a class="btn btn-default" asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

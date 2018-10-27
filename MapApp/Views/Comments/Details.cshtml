@@ -1,0 +1,81 @@
+@model MapApp.Models.CommentsModels.Comment
+
+@{
+    ViewData["Title"] = "Comment Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Comment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd>
+            <select id="barrating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Header)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Header)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Content)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreateTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EditTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EditTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+    </dl>
+</div>
+<div>
+    @if (Model.User == this.User.Identity.Name || this.User.IsInRole("Administrator"))
+    {
+        <a class="btn btn-primary fa fa-pencil" asp-action="Edit" asp-route-id="@Model.ID"></a> @Html.Raw(" | ")
+    }
+    <a class="btn btn-default" asp-controller="Locations" asp-action="Details" asp-route-id="@Model.Location">Back to List</a>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $('#barrating').barrating({
+                theme: 'fontawesome-stars-o',
+                readonly: true,
+                initialRating: @Model.Rating
+            });
+        });
+    </script>
+}

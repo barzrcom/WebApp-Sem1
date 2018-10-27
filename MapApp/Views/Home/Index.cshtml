@@ -1,27 +1,25 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+	ViewData["Title"] = "Home Page";
 }
-<br/>
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h3>
-            <b>My Map</b>
-        </h3>
-    </div>
-    <div class="panel-body">
-        <div id="map"></div>
-    </div>
-    <br>
-    <button id="refresh_locations" class="btn btn-default">Refresh Locations</button>
-    <button id="clear_locations" class="btn btn-default">Clear Locations</button>
 
+
+
+<div class="panel-body">
+	<div id="map" class="class--map"></div>
 </div>
-@section Scripts {
-    <script src="~/js/map.js"></script>
+<br>
+<div class="container--map" id="floating-panel">
+	<button id="refresh_locations" class="btn-lg btn-primary fa fa-refresh"></button>
+	<button id="clear_locations" class="btn-lg btn-danger fa fa-times"></button>
+</div>
 
-    <script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3iZKrhlbxVPKs2DgI4ADKcGKkEVXxtGw&callback=initMap">
-    </script>
-    
-    <script src="~/js/index.js"></script>
+@section Scripts {
+	<script src="~/js/map.js"></script>
+
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3iZKrhlbxVPKs2DgI4ADKcGKkEVXxtGw&callback=initMap">
+	</script>
+
+	<script src="~/js/index.js"></script>
+
+
 }

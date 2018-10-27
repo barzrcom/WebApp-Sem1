@@ -7,6 +7,13 @@ using MapApp.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using MapApp.Models.CommentsModels;
+using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using MapApp.Models;
+using System.Collections.Generic;
 
 namespace MapApp.Controllers
 {
@@ -14,24 +21,37 @@ namespace MapApp.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AdminController(ApplicationDbContext context)
+        public AdminController(ApplicationDbContext context, IServiceProvider serviceProvider)
         {
             _context = context;
+            _userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         }
 
         // GET: Admin/Users
-        public async Task<IActionResult> Users()
+        public async Task<IActionResult> Users(string id, string user)
         {
-            
-            return View(await _context.Users.ToListAsync());
+            var users = await _context.Users.ToListAsync();
+            var userRoles = _context.Roles.Include(r => r.Users).ToList();
+            ViewBag.RolesList = _context.Roles.ToDictionary(k => k.Id);
+
+            if (!String.IsNullOrEmpty(id)) users = users.Where(s => s.Id.Contains(id)).ToList();
+            if (!String.IsNullOrEmpty(user)) users = users.Where(s => s.UserName.Contains(user)).ToList();
+
+            return View(users);
         }
 
         // GET: Admin/Locations
-        public async Task<IActionResult> Locations()
+        public IActionResult Locations()
         {
+            return RedirectToAction("Index", "Locations");
+        }
 
-            return View(await _context.Location.ToListAsync());
+        // GET: Admin/Comments
+        public IActionResult Comments()
+        {
+            return RedirectToAction("Index", "Comments");
         }
 
         [Authorize]
@@ -65,110 +85,56 @@ namespace MapApp.Controllers
             return RedirectToAction("Users");
         }
 
-        private async void UpdateCustomFields(Location location, IFormFile Image)
-        {
-            // TODO: Convert Image file to byte here.
-            if (Image != null && Image.Length > 0)
-            {
-                using (var stream = new MemoryStream())
-                {
-                    await Image.CopyToAsync(stream);
-                    location.Image = stream.ToArray();
-                }
-            }
-
-            //location.Image = Convert.ToBase64String(location.Image);
-            location.User = User.Identity.Name;
-        }
-
-        private bool LocationExists(int id)
-        {
-            return _context.Location.Any(e => e.ID == id);
-        }
-
         [Authorize]
-        // GET: Admin/EditLocation/5
-        public async Task<IActionResult> EditLocation(int? id)
+        // GET: Admin/ManageUserRole/5
+        public async Task<IActionResult> ManageUserRoles(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var location = await _context.Location.SingleOrDefaultAsync(m => m.ID == id);
-            if (location == null)
+            var user = await _context.Users
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (user == null)
             {
                 return NotFound();
             }
-            return View(location);
+            var userRoles = _context.Roles.Include(r => r.Users).ToList();
+
+            ViewBag.RolesList = _context.Roles.ToDictionary(k => k.Id);
+
+            return View(user);
         }
 
-        [Authorize]
-        // POST: Admin/EditLocation/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditLocation(int id, [Bind("ID,Name,Description,Category,Latitude,Longitude")] Location location, IFormFile Image)
+        // GET: Admin/AddRole/5
+        public async Task<IActionResult> AddRole(string id, string role)
         {
-            if (id != location.ID)
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                var roleResult = await _userManager.AddToRoleAsync(user, role);
+            }
+            else
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    this.UpdateCustomFields(location, Image);
-                    _context.Update(location);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LocationExists(location.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Locations");
-            }
-            return View(location);
+            return RedirectToAction("Users");
         }
 
-        [Authorize]
-        // GET: Admin/DeleteLocation/5
-        public async Task<IActionResult> DeleteLocation(int? id)
+        // GET: Admin/RemoveRole/5
+        public async Task<IActionResult> RemoveRole(string id, string role)
         {
-            if (id == null)
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                var roleResult = await _userManager.RemoveFromRoleAsync(user, role);
+            }
+            else
             {
                 return NotFound();
             }
-
-            var location = await _context.Location
-                .SingleOrDefaultAsync(m => m.ID == id);
-            if (location == null)
-            {
-                return NotFound();
-            }
-
-            return View(location);
-        }
-
-        [Authorize]
-        // POST: Admin/DeleteLocation/5
-        [HttpPost, ActionName("DeleteLocation")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteLocationConfirmed(int id)
-        {
-            var location = await _context.Location.SingleOrDefaultAsync(m => m.ID == id);
-            _context.Location.Remove(location);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Locations");
+            return RedirectToAction("Users");
         }
     }
 }

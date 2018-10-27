@@ -31,6 +31,19 @@
             @Html.DisplayFor(model => model.Category)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd>
+            <select id="barrating">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Latitude)
         </dt>
         <dd>
@@ -49,11 +62,25 @@
             @Html.DisplayFor(model => model.Image)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-action="Index">Back to List</a>
+            <button class="btn btn-danger fa fa-times" type="submit"></button>
+            <a class="btn btn-default" asp-action="Index">Back to List</a>
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $('#barrating').barrating({
+                theme: 'fontawesome-stars-o',
+                readonly: true,
+                initialRating: @Model.Rating,
+                allowEmpty: true,
+                emptyValue: 0
+            });
+        });
+    </script>
+}

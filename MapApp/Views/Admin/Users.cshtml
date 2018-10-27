@@ -15,23 +15,60 @@
 			<th>
 				@Html.DisplayNameFor(model => model.UserName)
 			</th>
-			<th></th>
+			<th>
+                Roles
+            </th>
 		</tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-		<tr>
-			<td>
-				@Html.DisplayFor(modelItem => item.Id)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Email)
-			</td>
-		
-			<td>
-			    <a asp-action="DeleteUser" asp-route-id="@item.Id">Delete</a>
-			</td>
-		</tr>
-}
+    <form asp-controller="Admin" asp-action="Users" method="get">
+        <tr>
+            <td>
+                <input type="text" name="id" value="@(Context.Request.Query["id"])">
+            </td>
+            <td>
+                <input type="text" name="user" value="@(Context.Request.Query["user"])">
+            </td>
+            <td />
+
+            <td>
+                <button class="btn btn-primary fa fa-search" type="submit"  />
+            </td>
+        </tr>
+        
+    </form>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+
+                @{
+                    int index = 0;
+                    foreach (var v in item.Roles)
+                    {
+                        if (index++ > 0)
+                        {
+                            @Html.Raw(" | ");
+
+                        }
+                        <span class="label label-default">
+                            @Html.Raw(ViewBag.RolesList[v.RoleId].Name)
+                        </span>
+                    }
+                }
+            </td>
+
+            <td>
+                <a class="btn btn-primary fa fa-pencil" asp-action="ManageUserRoles" asp-route-id="@item.Id"></a>
+                <a class="btn btn-danger fa fa-times" asp-action="DeleteUser" asp-route-id="@item.Id"></a>
+            </td>
+        </tr>
+    }
     </tbody>
 </table>

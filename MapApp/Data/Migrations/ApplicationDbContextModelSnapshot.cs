@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
+using MapApp.Data;
+
 
 namespace MapApp.Data.Migrations
 {
@@ -64,12 +67,41 @@ namespace MapApp.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("MapApp.Models.CommentsModels.Comment", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content")
+                        .HasMaxLength(500);
+
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<DateTime>("EditTime");
+
+                    b.Property<string>("Header")
+                        .IsRequired()
+                        .HasMaxLength(60);
+
+                    b.Property<int>("Location");
+
+                    b.Property<int>("Rating");
+
+                    b.Property<string>("User");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Comment");
+                });
+
             modelBuilder.Entity("MapApp.Models.LocationModels.Location", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<byte>("Category");
+
+                    b.Property<DateTime>("CreatedDate");
 
                     b.Property<string>("Description");
 
@@ -81,6 +113,8 @@ namespace MapApp.Data.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<float>("Rating");
+
                     b.Property<string>("User");
 
                     b.HasKey("ID");
@@ -90,16 +124,16 @@ namespace MapApp.Data.Migrations
 
             modelBuilder.Entity("MapApp.Models.ViewModels.View", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<string>("LocationId");
+                    b.Property<int>("LocationId");
 
                     b.Property<string>("UserId");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.ToTable("View");
                 });

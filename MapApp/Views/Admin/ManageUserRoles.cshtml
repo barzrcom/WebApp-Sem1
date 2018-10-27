@@ -1,0 +1,43 @@
+@model MapApp.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Role
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.RolesList)
+        {
+            <tr>
+                <td>
+                    @Html.Raw(item.Value.Name)
+                </td>
+                <td>
+                    @{
+                        if (!Model.Roles.Any(x => x.RoleId == item.Value.Id))
+                        {
+                            <a class="btn btn-primary fa fa-plus" asp-action="AddRole" asp-route-id="@Model.Id" asp-route-role="@item.Value.Name"></a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-danger fa fa-minus" asp-action="RemoveRole" asp-route-id="@Model.Id" asp-route-role="@item.Value.Name"></a>
+                        }
+                     }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a class="btn btn-default" asp-action="Users">Back to List</a>

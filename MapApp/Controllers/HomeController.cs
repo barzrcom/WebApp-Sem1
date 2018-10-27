@@ -2,7 +2,7 @@
 
 namespace MapApp.Controllers
 {
-	public class HomeController : Controller
+    public class HomeController : Controller
     {
         public IActionResult Index()
         {
@@ -11,14 +11,14 @@ namespace MapApp.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "A Story of Success";
 
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Statistics()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = "Your Statistics page.";
 
             return View();
         }
