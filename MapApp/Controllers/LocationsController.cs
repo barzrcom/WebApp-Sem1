@@ -15,6 +15,7 @@ using MapApp.Models.CommentsModels;
 using MapApp.Models.ViewModels;
 using Accord.MachineLearning.VectorMachines.Learning;
 using Accord.Statistics.Kernels;
+using PagedList.Core;
 
 namespace MapApp.Controllers
 {
@@ -30,18 +31,21 @@ namespace MapApp.Controllers
         }
 
 		// GET: Locations
-		public async Task<IActionResult> Index(string name, string user, string description, string category)
+		public async Task<IActionResult> Index(string name, string user, string description, string category, int page=1)
 		{
-		    var locations = await _context.Location.ToListAsync();
+            var locations = await _context.Location.ToListAsync();
 
-		    if (!String.IsNullOrEmpty(name)) locations = locations.Where(s => s.Name.Contains(name)).ToList();
+            if (!String.IsNullOrEmpty(name)) locations = locations.Where(s => s.Name.Contains(name)).ToList();
 		    if (!String.IsNullOrEmpty(user)) locations = locations.Where(s => s.User.Contains(user)).ToList();
 		    if (!String.IsNullOrEmpty(description)) locations = locations.Where(s => s.Description.Contains(description)).ToList();
 		    LocationCategory lc;
             if (!String.IsNullOrEmpty(category) && Enum.TryParse(category, true, out lc)) locations = locations.Where(s => s.Category.Equals(lc)).ToList();
 
-            return View(locations);
-		}
+            int pageSize = _configuration.GetValue<int>("Paging:Locations");
+            PagedList<Location> model = new PagedList<Location>(locations.ToList().AsQueryable(), page , pageSize);
+
+            return View("Index", model);
+        }
 
         // GET: Locations
         public async Task<IActionResult> Data()
@@ -366,10 +370,10 @@ namespace MapApp.Controllers
             List<int> trainSetOutput = new List<int>();
             resultTrain.ToList().ForEach(r => trainSetOutput.Add((r.c_rating > 3) ? 1 : 0));
 
-            //Get all locations for test set (locations that published by another user)
+            //Get all locations for test set (locations that published by another user and have some comments)
             var resultTest =
                 from l in locations
-                where !l.User.Equals(User.Identity.Name)
+                where !l.User.Equals(User.Identity.Name) && !l.Rating.Equals(0)
                 select new { l.Category, l.Rating, l.ID };
 
             //Create a list of {Category, Location Rating} for test set
@@ -384,15 +388,22 @@ namespace MapApp.Controllers
 
             int TrainSetMinimumSize = _configuration.GetValue<int>("MachineLearning:TrainSetMinimumSize");
             ViewData["TrainSetMinimumSize"] = TrainSetMinimumSize;
-            if (trainSetOutput.Count() > TrainSetMinimumSize)
+            ViewData["TrainSetCountValidation"] = false;
+
+            //require a valid training set
+            if (trainSetOutput.Count() >= TrainSetMinimumSize)
             {
+                ViewData["TrainSetCountValidation"] = true;
                 bool[] answers = ML_SVM(trainSetInput, trainSetOutput, testSet);
 
                 //Build a recommends location based on SVM result
                 for (var i = 0; i < answers.Count(); i++)
                 {
-                    if (answers[i])
+                    //check if the classification is ture && filter all the locations the user already visited (leave a comment)
+                    if (answers[i] && (comments.Where(c => c.Location == locationsID[i] && c.User.Equals(User.Identity.Name)).Count() == 0))
+                    {
                         locationRecommends.Add(locations.Where(s => s.ID == locationsID[i]).SingleOrDefault());
+                    }
                 }
             }
 

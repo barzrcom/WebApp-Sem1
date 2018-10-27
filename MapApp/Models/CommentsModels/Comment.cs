@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,6 +26,7 @@ namespace MapApp.Models.CommentsModels
         public string User { get; set; }
 
         // The location the comment belongs to
+        [ForeignKey("Location")]
         public int Location { get; set; }
 
         [Range(1, 5)]
