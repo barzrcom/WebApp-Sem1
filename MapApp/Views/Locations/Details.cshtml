@@ -5,11 +5,7 @@
 }
 
 <h2>Details</h2>
-<style>
-	.dl-horizontal dt {
-		text-align: left;
-	}
-</style>
+
 <div class="row">
 	<h4>Location</h4>
 	<hr />
@@ -78,7 +74,7 @@
 				if (Model.Image != null) { totalMessage += "data:image;base64, " + System.Convert.ToBase64String(Model.Image); }
 				else { totalMessage += "/images/null_image.png"; };
 			}
-			<img src="@totalMessage" width=100% height=auto cursor:pointer data-toggle="modal" data-target="#exampleModal" />
+			<img src="@totalMessage" class="thumbimg" data-toggle="modal" data-target="#exampleModal" />
 		</dd>
 	</dl>
 	<div class="col-lg-6 pull-right" id="map"></div>
