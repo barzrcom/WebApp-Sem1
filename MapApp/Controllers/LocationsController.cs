@@ -281,10 +281,19 @@ namespace MapApp.Controllers
             var comments = from com in _context.Comment
                           where com.Location.Equals(id)
                           select com;
-            foreach(var c in comments)
+            foreach(Comment c in comments)
             {
                 _context.Comment.Remove(c);
             }
+
+		    // Delete all the views along the Location
+		    var views = from v in _context.View
+		        where v.LocationId.Equals(id)
+		        select v;
+		    foreach (View v in views)
+		    {
+		        _context.View.Remove(v);
+		    }
 
             await _context.SaveChangesAsync();
 			return RedirectToAction("Index");
