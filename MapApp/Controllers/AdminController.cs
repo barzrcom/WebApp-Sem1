@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using MapApp.Models;
 using System.Collections.Generic;
+using MapApp.Models.ViewModels;
 
 namespace MapApp.Controllers
 {
@@ -79,8 +80,43 @@ namespace MapApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteUserConfirmed(string id)
         {
+            // get email from id
+            var email = (await _context.Users.SingleOrDefaultAsync(m => m.Id == id)).Email;
+
             var user = await _context.Users.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Users.Remove(user);
+            await _userManager.DeleteAsync(user);
+
+
+
+            // Delete all the comments along the Location
+            var comments = from com in _context.Comment
+                where com.User.Equals(email)
+                select com;
+            foreach (Comment c in comments)
+            {
+                _context.Comment.Remove(c);
+            }
+
+            // Delete all the views along the Location
+            var views = from v in _context.View
+                where v.UserId.Equals(email)
+                select v;
+            foreach (View v in views)
+            {
+                _context.View.Remove(v);
+            }
+
+            // Delete all the views along the Location
+            var locations = from l in _context.Location
+                            where l.User.Equals(email)
+                select l;
+            foreach (Location l in locations)
+            {
+                _context.Location.Remove(l);
+            }
+
+
+
             await _context.SaveChangesAsync();
             return RedirectToAction("Users");
         }
