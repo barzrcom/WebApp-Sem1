@@ -87,7 +87,7 @@
                     @Html.DisplayFor(modelItem => item.User)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Location)
+                    <a asp-controller="Locations" asp-action="Details" asp-route-id="@item.Location">@Html.DisplayFor(modelItem => item.Location)</a>
                 </td>
                 <td style='white-space: nowrap'>
                     <a class="btn btn-primary fa fa-pencil" asp-action="Edit" asp-route-id="@item.ID"></a>
